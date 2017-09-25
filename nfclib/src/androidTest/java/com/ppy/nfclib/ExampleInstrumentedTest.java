@@ -1,4 +1,4 @@
-package com.ppy.peng.nfclib;
+package com.ppy.nfclib;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

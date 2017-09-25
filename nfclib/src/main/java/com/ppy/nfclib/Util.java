@@ -2,6 +2,7 @@ package com.ppy.nfclib;
 
 import android.content.Context;
 import android.nfc.NfcAdapter;
+import android.os.Build;
 
 /**
  * Created by ZP on 2017/9/20.
@@ -51,7 +52,7 @@ public class Util {
      * 判断手机是否具备NFC功能
      *
      * @param context {@link Context}
-     * @return true 具备  false 不具备
+     * @return {@code true}: 具备 {@code false}: 不具备
      */
     public static boolean isNfcExits(Context context) {
         NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(context);
@@ -62,10 +63,32 @@ public class Util {
      * 判断手机NFC是否开启
      *
      * @param context {@link Context}
-     * @return true 已开启 false 未开启
+     * @return {@code true}: 已开启 {@code false}: 未开启
      */
     public static boolean isNfcEnable(Context context) {
         NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(context);
         return nfcAdapter != null && nfcAdapter.isEnabled();
     }
+
+    /**
+     * 判断手机NFC的Android Beam是否开启，在API 16之后才有
+     *
+     * @param context {@link Context}
+     * @return {@code true}: 已开启 {@code false}: 未开启
+     */
+    public static boolean isAndroidBeamEnable(Context context) {
+        NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(context);
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && nfcAdapter != null && nfcAdapter.isNdefPushEnabled();
+    }
+
+    /**
+     * 判断手机是否具备Android Beam
+     *
+     * @param context {@link Context}
+     * @return {@code true}:具备 {@code false}:不具备
+     */
+    public static boolean isAndroidBeamExits(Context context) {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && isNfcExits(context);
+    }
+
 }

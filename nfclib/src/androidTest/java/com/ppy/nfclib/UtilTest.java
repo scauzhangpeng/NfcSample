@@ -1,4 +1,4 @@
-package com.ppy.peng.nfclib;
+package com.ppy.nfclib;
 
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
@@ -29,6 +29,12 @@ public class UtilTest {
     public void isNfcEnable() throws Exception {
         boolean nfcEnable = Util.isNfcEnable(mActivityTestRule.getActivity());
         Assert.assertTrue(nfcEnable);
+    }
+
+    @Test
+    public void isAndroidBeamEnable() throws Exception {
+        boolean androidBeamEnable = Util.isAndroidBeamEnable(mActivityTestRule.getActivity());
+        Assert.assertTrue(androidBeamEnable);
     }
 
 }
