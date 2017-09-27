@@ -1,5 +1,6 @@
 package com.ppy.nfclib;
 
+import android.app.Activity;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.TagLostException;
@@ -20,6 +21,7 @@ public class CardReader {
 
     private String TAG = this.getClass().getSimpleName();
     protected NfcAdapter mDefaultAdapter;
+    protected Activity mActivity;
     protected IsoDep mIsoDep;
     protected boolean isCardConnected;
     private Handler mHandler;
@@ -29,9 +31,31 @@ public class CardReader {
     public CardReader() {
 
     }
+    public CardReader(Activity activity) {
+        mActivity = activity;
+        mDefaultAdapter = NfcAdapter.getDefaultAdapter(activity);
+    }
 
     protected void enableCardReader() {
+        if (mActivity == null) {
+            throw new RuntimeException("please init first...");
+        }
+        if (!Util.isNfcExits(mActivity)) {
+            catchException(ExceptionConstant.NFC_NOT_EXIT);
+            return;
+        }
+
+        if (!Util.isNfcEnable(mActivity)) {
+            catchException(ExceptionConstant.NFC_NOT_ENABLE);
+            return;
+        }
         Log.d(TAG, "enableCardReader: ");
+    }
+
+    private void catchException(int code) {
+        if (mCardOperatorListener != null) {
+            mCardOperatorListener.onException(code, ExceptionConstant.mNFCException.get(code));
+        }
     }
 
     protected void disableCardReader() {

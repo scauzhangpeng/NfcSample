@@ -2,14 +2,31 @@ package com.ppy.nfcsample.card;
 
 /**
  * Created by ZP on 2017/9/21.
+ * <p>
+ *     城市一卡通卡片交易记录实体
+ * </p>
  */
 
-public class CardRecord {
-
+public class DefaultCardRecord {
+    /**
+     * 交易类型编码
+     */
     private String typeCode;
+    /**
+     * 交易类型名称
+     */
     private String typeName;
+    /**
+     * 交易金额，单位：分
+     */
     private long price;
+    /**
+     * 交易日期：yyyyMMddHHmmss
+     */
     private String date;
+    /**
+     * 交易序列号
+     */
     private String serialNumber;
 
     public String getSerialNumber() {

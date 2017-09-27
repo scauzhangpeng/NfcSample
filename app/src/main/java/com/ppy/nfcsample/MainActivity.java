@@ -6,13 +6,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.ppy.nfclib.CardOperatorListener;
 import com.ppy.nfclib.NfcCardReaderManager;
 import com.ppy.nfcsample.adapter.RiotGameAdapter;
 import com.ppy.nfcsample.adapter.RiotGameViewHolder;
-import com.ppy.nfcsample.card.CardRecord;
+import com.ppy.nfcsample.card.DefaultCardRecord;
 import com.ppy.nfcsample.card.Commands;
 import com.ppy.nfcsample.card.Iso7816;
 
@@ -28,8 +29,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView mTvCardBalance;
 
     private RecyclerView mRvCardRecord;
-    private RiotGameAdapter<CardRecord> mAdapter;
-    private List<CardRecord> mCardRecords;
+    private RiotGameAdapter<DefaultCardRecord> mAdapter;
+    private List<DefaultCardRecord> mCardRecords;
 
     private NfcCardReaderManager mReaderManager;
     private CardOperatorListener mCardOperatorListener = new CardOperatorListener() {
@@ -39,6 +40,11 @@ public class MainActivity extends AppCompatActivity {
             if (isConnected) {
                 readCard();
             }
+        }
+
+        @Override
+        public void onException(int code, String message) {
+            System.out.println(message);
         }
     };
 
@@ -58,9 +64,9 @@ public class MainActivity extends AppCompatActivity {
         mRvCardRecord.setLayoutManager(new LinearLayoutManager(this));
         mRvCardRecord.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         mCardRecords = new ArrayList<>();
-        mAdapter = new RiotGameAdapter<CardRecord>(R.layout.item_card_record, mCardRecords, this) {
+        mAdapter = new RiotGameAdapter<DefaultCardRecord>(R.layout.item_card_record, mCardRecords, this) {
             @Override
-            protected void bindData(RiotGameViewHolder holder, CardRecord cardRecord, int position) {
+            protected void bindData(RiotGameViewHolder holder, DefaultCardRecord cardRecord, int position) {
                 holder.setText(R.id.tv_record_type, String.valueOf(cardRecord.getTypeName()));
                 holder.setText(R.id.tv_record_date, DateUtil.str2str(cardRecord.getDate(), DateUtil.MMddHHmmss, DateUtil.MM_dd_HH_mm));
                 String price = Commands.toAmountString(cardRecord.getPrice() / 100.0f);
@@ -81,11 +87,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        Log.d(TAG, "onStart: ");
         mReaderManager.onStart(this);
     }
 
     @Override
     protected void onResume() {
+        Log.d(TAG, "onResume: ");
         super.onResume();
         mReaderManager.onResume();
     }
@@ -93,7 +101,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        Log.d(TAG, "onPause: ");
         mReaderManager.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop: ");
     }
 
     @Override
@@ -149,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void parseRecords(List<Iso7816> cmds1) {
         for (int i = 0; i < cmds1.size(); i++) {
-            CardRecord records = new CardRecord();
+            DefaultCardRecord records = new DefaultCardRecord();
             records.readRecord(cmds1.get(i).getResp());
             mCardRecords.add(records);
         }

@@ -13,7 +13,6 @@ import android.os.Build;
 @TargetApi(Build.VERSION_CODES.KITKAT)
 public class KikKatCardReader extends CardReader {
 
-    private Activity mActivity;
     private NfcAdapter.ReaderCallback mReaderCallback = new NfcAdapter.ReaderCallback() {
         @Override
         public void onTagDiscovered(Tag tag) {
@@ -27,20 +26,23 @@ public class KikKatCardReader extends CardReader {
             | NfcAdapter.FLAG_READER_SKIP_NDEF_CHECK;
 
     public KikKatCardReader(Activity activity) {
-        mActivity = activity;
-        mDefaultAdapter = NfcAdapter.getDefaultAdapter(activity);
+        super(activity);
     }
 
     @Override
     protected void enableCardReader() {
         super.enableCardReader();
-        mDefaultAdapter.enableReaderMode(mActivity, mReaderCallback, READER_FLAG, null);
+        if (mDefaultAdapter != null) {
+            mDefaultAdapter.enableReaderMode(mActivity, mReaderCallback, READER_FLAG, null);
+        }
     }
 
     @Override
     protected void disableCardReader() {
         super.disableCardReader();
-        mDefaultAdapter.disableReaderMode(mActivity);
+        if (mDefaultAdapter != null) {
+            mDefaultAdapter.disableReaderMode(mActivity);
+        }
     }
 
     @Override
