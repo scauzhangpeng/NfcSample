@@ -14,73 +14,49 @@ public class DefaultCardInfo {
     /**
      *  卡号
      */
-    private String cardNumber;
+    protected String cardNumber;
     /**
      *  卡片版本
      */
-    private int version;
+    protected int version;
     /**
      * 卡片余额
      */
-    private long balance;
+    protected long balance;
     /**
      * 卡片生效日期
      */
-    private String effectiveDate;
+    protected String effectiveDate;
     /**
      * 卡片失效日期
      */
-    private String expiredDate;
+    protected String expiredDate;
     /**
      * 卡片交易记录
      */
-    private List<DefaultCardRecord> records;
-
-    public int getVersion() {
-        return version;
-    }
-
-    public void setVersion(int version) {
-        this.version = version;
-    }
-
-    public String getEffectiveDate() {
-        return effectiveDate;
-    }
-
-    public void setEffectiveDate(String effectiveDate) {
-        this.effectiveDate = effectiveDate;
-    }
-
-    public String getExpiredDate() {
-        return expiredDate;
-    }
-
-    public void setExpiredDate(String expiredDate) {
-        this.expiredDate = expiredDate;
-    }
+    protected List<DefaultCardRecord> records;
 
     public String getCardNumber() {
         return cardNumber;
     }
 
-    public void setCardNumber(String cardNumber) {
-        this.cardNumber = cardNumber;
+    public int getVersion() {
+        return version;
     }
 
     public long getBalance() {
         return balance;
     }
 
-    public void setBalance(long balance) {
-        this.balance = balance;
+    public String getEffectiveDate() {
+        return effectiveDate;
+    }
+
+    public String getExpiredDate() {
+        return expiredDate;
     }
 
     public List<DefaultCardRecord> getRecords() {
         return records;
-    }
-
-    public void setRecords(List<DefaultCardRecord> records) {
-        this.records = records;
     }
 }

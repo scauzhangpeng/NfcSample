@@ -26,7 +26,7 @@ public class CardReader {
     protected boolean isCardConnected;
     private Handler mHandler;
     private HandlerThread mHandlerThread;
-    private CardOperatorListener mCardOperatorListener;
+    private CardReaderHandler mCardReaderHandler;
 
     public CardReader() {
 
@@ -41,21 +41,17 @@ public class CardReader {
             throw new RuntimeException("please init first...");
         }
         if (!Util.isNfcExits(mActivity)) {
-            catchException(ExceptionConstant.NFC_NOT_EXIT);
-            return;
+            if (mCardReaderHandler != null) {
+                mCardReaderHandler.onNfcNotExit();
+            }
         }
 
         if (!Util.isNfcEnable(mActivity)) {
-            catchException(ExceptionConstant.NFC_NOT_ENABLE);
-            return;
+            if (mCardReaderHandler != null) {
+                mCardReaderHandler.onNfcNotEnable();
+            }
         }
         Log.d(TAG, "enableCardReader: ");
-    }
-
-    private void catchException(int code) {
-        if (mCardOperatorListener != null) {
-            mCardOperatorListener.onException(code, ExceptionConstant.mNFCException.get(code));
-        }
     }
 
     protected void disableCardReader() {
@@ -103,25 +99,21 @@ public class CardReader {
     }
 
     private void doOnCardConnected(boolean isConnected) {
-        if (mCardOperatorListener == null) {
+        if (mCardReaderHandler == null) {
             return;
         }
         isCardConnected = isConnected;
         if (isConnected) {
-            mCardOperatorListener.onCardConnected(true);
+            mCardReaderHandler.onCardConnected(true);
             checkConnected();
         } else {
             mIsoDep = null;
-            mCardOperatorListener.onCardConnected(false);
+            mCardReaderHandler.onCardConnected(false);
         }
     }
 
     public boolean isCardConnected() {
         return isCardConnected && mIsoDep != null && mIsoDep.isConnected();
-    }
-
-    public void setCardConnected(boolean cardConnected) {
-        isCardConnected = cardConnected;
     }
 
     protected void enablePlatformSound(boolean enableSound) {
@@ -135,8 +127,8 @@ public class CardReader {
         return mIsoDep.transceive(data);
     }
 
-    public void setOnCardOperatorListener(CardOperatorListener listener) {
-        mCardOperatorListener = listener;
+    public void setOnCardReaderHandler(CardReaderHandler handler) {
+        mCardReaderHandler = handler;
         startCheckThread();
     }
 

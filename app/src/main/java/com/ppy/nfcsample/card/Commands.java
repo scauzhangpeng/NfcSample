@@ -116,19 +116,5 @@ public class Commands {
         return data;
     }
 
-    public static int toInt(byte[] b, int s, int n) {
-        int ret = 0;
-
-        final int e = s + n;
-        for (int i = s; i < e; ++i) {
-            ret <<= 8;
-            ret |= b[i] & 0xFF;
-        }
-        return ret;
-    }
-
-    public static String toAmountString(float value) {
-        return String.format("%.2f", value);
-    }
 
 }

@@ -11,11 +11,13 @@ import android.widget.TextView;
 
 import com.ppy.nfclib.CardOperatorListener;
 import com.ppy.nfclib.NfcCardReaderManager;
+import com.ppy.nfclib.Util;
 import com.ppy.nfcsample.adapter.RiotGameAdapter;
 import com.ppy.nfcsample.adapter.RiotGameViewHolder;
 import com.ppy.nfcsample.card.DefaultCardRecord;
 import com.ppy.nfcsample.card.Commands;
 import com.ppy.nfcsample.card.Iso7816;
+import com.ppy.nfcsample.card.YangChengTong;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView mRvCardRecord;
     private RiotGameAdapter<DefaultCardRecord> mAdapter;
     private List<DefaultCardRecord> mCardRecords;
+    private YangChengTong mYangChengTong;
 
     private NfcCardReaderManager mReaderManager;
     private CardOperatorListener mCardOperatorListener = new CardOperatorListener() {
@@ -45,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onException(int code, String message) {
             System.out.println(message);
+            if (code == 1) {
+                Util.intentToNfcSetting(MainActivity.this);
+            }
         }
     };
 
@@ -60,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
         mTvCardNumber = (TextView) findViewById(R.id.tv_card_number);
         mTvCardBalance = (TextView) findViewById(R.id.tv_card_balance);
 
+        mYangChengTong = new YangChengTong();
+
         mRvCardRecord = (RecyclerView) findViewById(R.id.rv_card_record);
         mRvCardRecord.setLayoutManager(new LinearLayoutManager(this));
         mRvCardRecord.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
@@ -69,8 +77,12 @@ public class MainActivity extends AppCompatActivity {
             protected void bindData(RiotGameViewHolder holder, DefaultCardRecord cardRecord, int position) {
                 holder.setText(R.id.tv_record_type, String.valueOf(cardRecord.getTypeName()));
                 holder.setText(R.id.tv_record_date, DateUtil.str2str(cardRecord.getDate(), DateUtil.MMddHHmmss, DateUtil.MM_dd_HH_mm));
-                String price = Commands.toAmountString(cardRecord.getPrice() / 100.0f);
-                holder.setText(R.id.tv_record_price, price);
+                String price = Util.toAmountString(cardRecord.getPrice());
+                if ("09".equals(cardRecord.getTypeCode())) {
+                    holder.setText(R.id.tv_record_price, "-" + price);
+                } else {
+                    holder.setText(R.id.tv_record_price, price);
+                }
             }
         };
         mRvCardRecord.setAdapter(mAdapter);
@@ -165,8 +177,12 @@ public class MainActivity extends AppCompatActivity {
     private void parseRecords(List<Iso7816> cmds1) {
         for (int i = 0; i < cmds1.size(); i++) {
             DefaultCardRecord records = new DefaultCardRecord();
-            records.readRecord(cmds1.get(i).getResp());
-            mCardRecords.add(records);
+            try {
+                records.readRecord(cmds1.get(i).getResp());
+                mCardRecords.add(records);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         runOnUiThread(new Runnable() {
             @Override
@@ -177,23 +193,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void parseBalance(Iso7816 iso7816) {
-        String temp = Commands.ByteArrayToHexString(iso7816.getResp());
-        final int balance = Commands.toInt(iso7816.getResp(), 0, iso7816.getResp().length - 2);
+        mYangChengTong.parseCardBalance(iso7816.getResp());
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mTvCardBalance.setText("余额：" + Commands.toAmountString(balance / 100.0f));
+                mTvCardBalance.setText("余额：" + Util.toAmountString(mYangChengTong.getBalance()));
             }
         });
     }
 
     private void parseInfo(Iso7816 iso7816) {
-        String temp = Commands.ByteArrayToHexString(iso7816.getResp());
-        final String cardNo = temp.substring(22, 32);
+        try {
+            if (iso7816.getResp() != null) {
+                String src = Util.ByteArrayToHexString(iso7816.getResp());
+                mYangChengTong.parseCardInfo(src);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mTvCardNumber.setText("卡号：" + cardNo);
+                mTvCardNumber.setText("卡号：" + mYangChengTong.getCardNumber());
             }
         });
     }

@@ -1,5 +1,7 @@
 package com.ppy.nfcsample.card;
 
+import com.ppy.nfclib.Util;
+
 /**
  * Created by ZP on 2017/9/21.
  * <p>
@@ -69,8 +71,8 @@ public class DefaultCardRecord {
         this.date = date;
     }
 
-    public void readRecord(byte[] resp) {
-        String record = Commands.ByteArrayToHexString(resp);
+    public void readRecord(byte[] resp) throws Exception{
+        String record = Util.ByteArrayToHexString(resp);
         serialNumber = record.substring(0,4);
         price = Integer.parseInt(record.substring(10, 18), 16);
         typeCode = record.substring(18, 20);

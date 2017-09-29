@@ -17,6 +17,32 @@ public class NfcCardReaderManager implements INfcCardReader{
     private Activity mActivity;
     private CardReader mCardReader;
     private boolean enableSound = true;
+    private CardOperatorListener mCardOperatorListener;
+
+    private CardReaderHandler mHandler = new CardReaderHandler() {
+        @Override
+        public void onNfcNotExit() {
+            if (mCardOperatorListener != null) {
+                mCardOperatorListener.onException(ExceptionConstant.NFC_NOT_EXIT,
+                        ExceptionConstant.mNFCException.get(ExceptionConstant.NFC_NOT_EXIT));
+            }
+        }
+
+        @Override
+        public void onNfcNotEnable() {
+            if (mCardOperatorListener != null) {
+                mCardOperatorListener.onException(ExceptionConstant.NFC_NOT_ENABLE,
+                        ExceptionConstant.mNFCException.get(ExceptionConstant.NFC_NOT_ENABLE));
+            }
+        }
+
+        @Override
+        public void onCardConnected(boolean isConnected) {
+            if (mCardOperatorListener != null) {
+                mCardOperatorListener.onCardConnected(isConnected);
+            }
+        }
+    };
 
 
     private NfcCardReaderManager(Builder builder) {
@@ -27,6 +53,7 @@ public class NfcCardReaderManager implements INfcCardReader{
         }
         enableSound = builder.enableSound;
         mCardReader.enablePlatformSound(enableSound);
+        mCardReader.setOnCardReaderHandler(mHandler);
     }
 
 
@@ -81,7 +108,7 @@ public class NfcCardReaderManager implements INfcCardReader{
     }
 
     public void setOnCardOperatorListener(CardOperatorListener listener) {
-        mCardReader.setOnCardOperatorListener(listener);
+        mCardOperatorListener = listener;
     }
 
     @Override
