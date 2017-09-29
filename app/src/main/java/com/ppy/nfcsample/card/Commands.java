@@ -8,21 +8,35 @@ import java.nio.ByteBuffer;
 
 public class Commands {
 
-    public final static byte[] DFN_SRV = { (byte) 'P', (byte) 'A', (byte) 'Y',
-            (byte) '.', (byte) 'A', (byte) 'P', (byte) 'P', (byte) 'Y', };
+    public final static byte[] DFN_SRV = {(byte) 'P', (byte) 'A', (byte) 'Y',
+            (byte) '.', (byte) 'A', (byte) 'P', (byte) 'P', (byte) 'Y',};
 
-    public final static byte[] DFN_SRV_S1 = { (byte) 'P', (byte) 'A',
+    public final static byte[] DFN_SRV_S1 = {(byte) 'P', (byte) 'A',
             (byte) 'Y', (byte) '.', (byte) 'P', (byte) 'A', (byte) 'S',
-            (byte) 'D', };
+            (byte) 'D',};
 
-    public final static byte[] DFN_SRV_S2 = { (byte) 'P', (byte) 'A',
+    public final static byte[] DFN_SRV_S2 = {(byte) 'P', (byte) 'A',
             (byte) 'Y', (byte) '.', (byte) 'T', (byte) 'I', (byte) 'C',
-            (byte) 'L', };
+            (byte) 'L',};
 
-    public final static byte[] DFN_PSE = { (byte) '1', (byte) 'P',
+    public final static byte[] DFN_PSE = {(byte) '1', (byte) 'P',
             (byte) 'A', (byte) 'Y', (byte) '.', (byte) 'S', (byte) 'Y',
             (byte) 'S', (byte) '.', (byte) 'D', (byte) 'D', (byte) 'F',
-            (byte) '0', (byte) '1', };
+            (byte) '0', (byte) '1',};
+
+    public static byte[] select_1001() {
+        ByteBuffer buff = ByteBuffer.allocate(8);
+        buff.put((byte) 0x00) // CLA Class
+                .put((byte) 0xA4) // INS Instruction
+                .put((byte) 0x00) // P1 Parameter 1
+                .put((byte) 0x00) // P2 Parameter 2
+                .put((byte) 0x02) // Lc
+                .put((byte) 0x10) //
+                .put((byte) 0x01) //
+                .put((byte) 0x00); // Le
+
+        return buff.array();
+    }
 
     public static byte[] selectByName(byte... name) {
         ByteBuffer buff = ByteBuffer.allocate(name.length + 6);
@@ -37,7 +51,7 @@ public class Commands {
     }
 
     public static byte[] readBinary(int sfi) {
-        final byte[] cmd = { (byte) 0x00, // CLA Class
+        final byte[] cmd = {(byte) 0x00, // CLA Class
                 (byte) 0xB0, // INS Instruction
                 (byte) (0x00000080 | (sfi & 0x1F)), // P1 Parameter 1
                 (byte) 0x00, // P2 Parameter 2
@@ -48,7 +62,7 @@ public class Commands {
     }
 
     public static byte[] readRecord(int sfi) {
-        final byte[] cmd = { (byte) 0x00, // CLA Class
+        final byte[] cmd = {(byte) 0x00, // CLA Class
                 (byte) 0xB2, // INS Instruction
                 (byte) 0x01, // P1 Parameter 1
                 (byte) ((sfi << 3) | 0x05), // P2 Parameter 2
@@ -59,7 +73,7 @@ public class Commands {
     }
 
     public static byte[] readRecord(int sfi, int index) {
-        final byte[] cmd = { (byte) 0x00, // CLA Class
+        final byte[] cmd = {(byte) 0x00, // CLA Class
                 (byte) 0xB2, // INS Instruction
                 (byte) index, // P1 Parameter 1
                 (byte) ((sfi << 3) | 0x04), // P2 Parameter 2
@@ -70,7 +84,7 @@ public class Commands {
     }
 
     public static byte[] getBalance(boolean isEP) {
-        final byte[] cmd = { (byte) 0x80, // CLA Class
+        final byte[] cmd = {(byte) 0x80, // CLA Class
                 (byte) 0x5C, // INS Instruction
                 (byte) 0x00, // P1 Parameter 1
                 (byte) (isEP ? 2 : 1), // P2 Parameter 2
@@ -87,10 +101,10 @@ public class Commands {
      * @return String, containing hexadecimal representation.
      */
     public static String ByteArrayToHexString(byte[] bytes) {
-        final char[] hexArray = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+        final char[] hexArray = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
         char[] hexChars = new char[bytes.length * 2];
         int v;
-        for ( int j = 0; j < bytes.length; j++ ) {
+        for (int j = 0; j < bytes.length; j++) {
             v = bytes[j] & 0xFF;
             hexChars[j * 2] = hexArray[v >>> 4];
             hexChars[j * 2 + 1] = hexArray[v & 0x0F];
@@ -100,7 +114,7 @@ public class Commands {
 
     /**
      * Utility class to convert a hexadecimal string to a byte string.
-     *
+     * <p>
      * <p>Behavior with input strings containing non-hexadecimal characters is undefined.
      *
      * @param s String containing hexadecimal characters to convert
@@ -111,7 +125,7 @@ public class Commands {
         byte[] data = new byte[len / 2];
         for (int i = 0; i < len; i += 2) {
             data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
-                    + Character.digit(s.charAt(i+1), 16));
+                    + Character.digit(s.charAt(i + 1), 16));
         }
         return data;
     }

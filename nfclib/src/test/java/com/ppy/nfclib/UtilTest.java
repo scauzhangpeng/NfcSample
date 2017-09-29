@@ -15,6 +15,11 @@ public class UtilTest {
         final int startIndex = 0;
         final int len = testData.length;
         Assert.assertEquals(1465, Util.hexToInt(testData, startIndex, len));
+
+        final byte[] testData1 = {(byte) 0x80, (byte) 0x00, (byte) 0x03, (byte)0xA2};
+        final int startIndex1 = 1;
+        final int len1 = testData.length - 1;
+        Assert.assertEquals(1465, Util.hexToInt(testData1, startIndex1, len1));
     }
 
     @Test
