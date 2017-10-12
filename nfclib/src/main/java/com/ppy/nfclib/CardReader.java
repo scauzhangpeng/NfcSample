@@ -7,6 +7,7 @@ import android.nfc.TagLostException;
 import android.nfc.tech.IsoDep;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.support.annotation.CallSuper;
 import android.util.Log;
 
 import java.io.IOException;
@@ -36,6 +37,7 @@ public class CardReader {
         mDefaultAdapter = NfcAdapter.getDefaultAdapter(activity);
     }
 
+    @CallSuper
     protected void enableCardReader() {
         if (mActivity == null) {
             throw new RuntimeException("please init first...");

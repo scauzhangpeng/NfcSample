@@ -14,7 +14,7 @@ import org.junit.runner.RunWith;
  */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class UtilTest {
+public class NFCUtilTest {
 
     @Rule
     public ActivityTestRule<AndroidTestActivity> mActivityTestRule = new ActivityTestRule<AndroidTestActivity>(AndroidTestActivity.class);
