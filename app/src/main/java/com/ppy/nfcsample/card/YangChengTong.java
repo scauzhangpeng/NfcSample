@@ -9,14 +9,20 @@ import com.ppy.nfclib.Util;
 public class YangChengTong extends DefaultCardInfo {
 
     /**
-     * 解析卡片信息,未判断9000
+     * 解析卡片信息
      *
-     * @throws Exception {@link IndexOutOfBoundsException}
      */
-    public void parseCardInfo(String src) throws Exception{
-        cardNumber = src.substring(22, 32);
-        effectiveDate = src.substring(46, 54);
-        expiredDate = src.substring(54, 62);
+    public boolean parseCardInfo(byte[] resp) {
+        try {
+            String src = Util.ByteArrayToHexString(resp);
+            cardNumber = src.substring(22, 32);
+            effectiveDate = src.substring(46, 54);
+            expiredDate = src.substring(54, 62);
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+        }
     }
 
     /**
@@ -24,7 +30,13 @@ public class YangChengTong extends DefaultCardInfo {
      *
      * @param src 原始16进制数据
      */
-    public void parseCardBalance(byte[] src) {
-        balance = Util.hexToInt(src, 0, src.length - 2);
+    public boolean parseCardBalance(byte[] src) {
+        try {
+            balance = Util.hexToInt(src, 0, src.length - 2);
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+        }
     }
 }

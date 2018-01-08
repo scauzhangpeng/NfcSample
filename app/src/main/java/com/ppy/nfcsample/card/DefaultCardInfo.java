@@ -1,5 +1,6 @@
 package com.ppy.nfcsample.card;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,6 +11,11 @@ import java.util.List;
  */
 
 public class DefaultCardInfo {
+
+    /**
+     * 卡片类型，例如：羊城通，深圳通
+     */
+    protected int type;
 
     /**
      *  卡号
@@ -34,7 +40,7 @@ public class DefaultCardInfo {
     /**
      * 卡片交易记录
      */
-    protected List<DefaultCardRecord> records;
+    protected List<DefaultCardRecord> records = new ArrayList<>(16);
 
     public String getCardNumber() {
         return cardNumber;
@@ -58,5 +64,13 @@ public class DefaultCardInfo {
 
     public List<DefaultCardRecord> getRecords() {
         return records;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 }

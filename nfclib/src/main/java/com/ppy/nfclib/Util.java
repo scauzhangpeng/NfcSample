@@ -79,6 +79,22 @@ public class Util {
         }
         return ret;
     }
+    /**
+     * 16进制转10进制 (小端模式)
+     *
+     * @param b 16进制
+     * @param s 起始下标
+     * @param n 长度, 按字符算
+     * @return 10进制
+     */
+    public static int hexToIntLittleEndian(byte[] b, int s, int n) {
+        int ret = 0;
+        for (int i = s; (i >= 0 && n > 0); --i, --n) {
+            ret <<= 8;
+            ret |= b[i] & 0xFF;
+        }
+        return ret;
+    }
 
 
     /**

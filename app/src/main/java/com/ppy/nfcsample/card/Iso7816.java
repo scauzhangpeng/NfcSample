@@ -5,12 +5,23 @@ package com.ppy.nfcsample.card;
  */
 
 public class Iso7816 {
+    public Iso7816(byte[] cmd, boolean isContinue) {
+        this.cmd = cmd;
+        this.isContinue = isContinue;
+    }
+
     public Iso7816(byte[] cmd) {
         this.cmd = cmd;
+        this.isContinue = false;
     }
 
     private byte[] cmd;
     private byte[] resp;
+    private boolean isContinue;
+
+    public boolean isContinue() {
+        return isContinue;
+    }
 
     public byte[] getCmd() {
         return cmd;

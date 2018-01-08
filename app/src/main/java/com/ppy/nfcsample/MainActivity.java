@@ -7,18 +7,21 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ppy.nfclib.CardOperatorListener;
 import com.ppy.nfclib.NfcCardReaderManager;
 import com.ppy.nfclib.Util;
 import com.ppy.nfcsample.adapter.RiotGameAdapter;
 import com.ppy.nfcsample.adapter.RiotGameViewHolder;
-import com.ppy.nfcsample.card.Commands;
+import com.ppy.nfcsample.card.DefaultCardInfo;
 import com.ppy.nfcsample.card.DefaultCardRecord;
-import com.ppy.nfcsample.card.Iso7816;
-import com.ppy.nfcsample.card.ShenZhenTong;
-import com.ppy.nfcsample.card.YangChengTong;
+import com.ppy.nfcsample.card.reader.CardClient;
+import com.ppy.nfcsample.card.reader.SZTReader;
+import com.ppy.nfcsample.card.reader.YCTReader;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,13 +31,15 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
+    private LinearLayout mLlReadCard;
+    private LinearLayout mLlShowCard;
+
     private TextView mTvCardNumber;
     private TextView mTvCardBalance;
 
     private RecyclerView mRvCardRecord;
     private RiotGameAdapter<DefaultCardRecord> mAdapter;
     private List<DefaultCardRecord> mCardRecords;
-    private YangChengTong mYangChengTong;
 
     private NfcCardReaderManager mReaderManager;
     private CardOperatorListener mCardOperatorListener = new CardOperatorListener() {
@@ -42,7 +47,18 @@ public class MainActivity extends AppCompatActivity {
         public void onCardConnected(boolean isConnected) {
             System.out.println(Thread.currentThread().getName());
             if (isConnected) {
-                readSZCard();
+                try {
+                    execute();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mLlReadCard.setVisibility(View.VISIBLE);
+                            mLlShowCard.setVisibility(View.GONE);
+                        }
+                    });
+                }
             }
         }
 
@@ -55,19 +71,23 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    private CardClient mCardClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initViews();
         initNfcCardReader();
+        initCardClient();
     }
 
     private void initViews() {
+        mLlReadCard = (LinearLayout) findViewById(R.id.ll_read_card);
+        mLlShowCard = (LinearLayout) findViewById(R.id.ll_show_card);
+
         mTvCardNumber = (TextView) findViewById(R.id.tv_card_number);
         mTvCardBalance = (TextView) findViewById(R.id.tv_card_balance);
-
-        mYangChengTong = new YangChengTong();
 
         mRvCardRecord = (RecyclerView) findViewById(R.id.rv_card_record);
         mRvCardRecord.setLayoutManager(new LinearLayoutManager(this));
@@ -95,6 +115,14 @@ public class MainActivity extends AppCompatActivity {
                 .enableSound(false)
                 .build();
         mReaderManager.setOnCardOperatorListener(mCardOperatorListener);
+    }
+
+    private void initCardClient() {
+        mCardClient = new CardClient.Builder()
+                .nfcManager(mReaderManager)
+                .addReader(new SZTReader())
+                .addReader(new YCTReader())
+                .build();
     }
 
     @Override
@@ -136,127 +164,34 @@ public class MainActivity extends AppCompatActivity {
         mReaderManager.onNewIntent(intent);
     }
 
-    private void readSZCard() {
-        try {
-            Iso7816 dir_1001 = new Iso7816(Commands.select_1001());
-            Iso7816 dir_srv_info = new Iso7816(Commands.readBinary(21));
-            Iso7816 balance = new Iso7816(Commands.getBalance(true));
-            List<Iso7816> cmds = new ArrayList<>();
-            cmds.add(dir_1001);
-            cmds.add(dir_srv_info);
-            cmds.add(balance);
-            for (int i = 1; i <= 10; i++) {
-                Iso7816 dir_srv_record = new Iso7816(Commands.readRecord(24, i));
-                cmds.add(dir_srv_record);
-            }
-            for (int i = 0; i < cmds.size(); i++) {
-                System.out.print("指令:" + Commands.ByteArrayToHexString(cmds.get(i).getCmd()));
-                byte[] resp = mReaderManager.tranceive(cmds.get(i).getCmd());
-                cmds.get(i).setResp(resp);
-                System.out.println("  响应:" + Commands.ByteArrayToHexString(resp));
-            }
-            final ShenZhenTong card = new ShenZhenTong();
-            card.parseCardInfo(cmds.get(1).getResp());
-            card.parseCardBalance(cmds.get(2).getResp());
-
+    private void execute() throws IOException {
+        final DefaultCardInfo cardInfo = mCardClient.execute();
+        if (cardInfo == null){
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mTvCardBalance.setText("余额：" + Util.toAmountString(card.getBalance()));
-                    mTvCardNumber.setText("卡号：" + card.getCardNumber());
+                    Toast.makeText(MainActivity.this, "not support", Toast.LENGTH_SHORT).show();
                 }
             });
-
-            List<Iso7816> cmds1 = new ArrayList<>();
-            for (int i = 3; i < 6; i++) {
-                cmds1.add(cmds.get(i));
-            }
-            parseRecords(cmds1);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    private void readCard() {
-        try {
-            Iso7816 dir_pse = new Iso7816(Commands.selectByName(Commands.DFN_PSE));
-            Iso7816 dir_srv = new Iso7816(Commands.selectByName(Commands.DFN_SRV));
-            Iso7816 dir_srv_s1 = new Iso7816(Commands.selectByName(Commands.DFN_SRV_S1));
-            Iso7816 dir_srv_s2 = new Iso7816(Commands.selectByName(Commands.DFN_SRV_S2));
-            Iso7816 dir_srv_info = new Iso7816(Commands.readBinary(21));
-            Iso7816 balance = new Iso7816(Commands.getBalance(true));
-            List<Iso7816> cmds = new ArrayList<>();
-//                cmds.add(dir_pse);
-            cmds.add(dir_srv);
-            cmds.add(dir_srv_info);
-//                cmds.add(dir_srv_s1);
-            cmds.add(dir_srv_s2);
-            cmds.add(balance);
-            for (int i = 1; i <= 12; i++) {
-                Iso7816 dir_srv_record = new Iso7816(Commands.readRecord(24, i));
-                cmds.add(dir_srv_record);
-            }
-//                cmds.add(dir_srv_info);
-            for (int i = 0; i < cmds.size(); i++) {
-                System.out.print("指令:" + Commands.ByteArrayToHexString(cmds.get(i).getCmd()));
-                byte[] resp = mReaderManager.tranceive(cmds.get(i).getCmd());
-                cmds.get(i).setResp(resp);
-                System.out.println("  响应:" + Commands.ByteArrayToHexString(resp));
-            }
-
-            parseInfo(cmds.get(1));
-            parseBalance(cmds.get(3));
-            List<Iso7816> cmds1 = new ArrayList<>();
-            for (int i = 4; i < 16; i++) {
-                cmds1.add(cmds.get(i));
-            }
-            parseRecords(cmds1);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    private void parseRecords(List<Iso7816> cmds1) {
-        for (int i = 0; i < cmds1.size(); i++) {
-            DefaultCardRecord records = new DefaultCardRecord();
-            try {
-                records.readRecord(cmds1.get(i).getResp());
-                mCardRecords.add(records);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            return;
         }
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mAdapter.notifyDataSetChanged();
-            }
-        });
-    }
-
-    private void parseBalance(Iso7816 iso7816) {
-        mYangChengTong.parseCardBalance(iso7816.getResp());
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mTvCardBalance.setText("余额：" + Util.toAmountString(mYangChengTong.getBalance()));
-            }
-        });
-    }
-
-    private void parseInfo(Iso7816 iso7816) {
-        try {
-            if (iso7816.getResp() != null) {
-                String src = Util.ByteArrayToHexString(iso7816.getResp());
-                mYangChengTong.parseCardInfo(src);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mTvCardNumber.setText("卡号：" + mYangChengTong.getCardNumber());
+                mLlReadCard.setVisibility(View.GONE);
+                mLlShowCard.setVisibility(View.VISIBLE);
+                if (cardInfo.getType() == 0) {
+                    mTvCardNumber.setText("羊城通卡号:" + cardInfo.getCardNumber());
+                    mTvCardBalance.setText("余额：" + Util.toAmountString(cardInfo.getBalance()));
+                    mCardRecords.addAll(cardInfo.getRecords());
+                    mAdapter.notifyDataSetChanged();
+                }
+                if (cardInfo.getType() == 1) {
+                    mTvCardNumber.setText("深圳通卡号:" + cardInfo.getCardNumber());
+                    mTvCardBalance.setText("余额：" + Util.toAmountString(cardInfo.getBalance()));
+                    mCardRecords.addAll(cardInfo.getRecords());
+                    mAdapter.notifyDataSetChanged();
+                }
             }
         });
     }

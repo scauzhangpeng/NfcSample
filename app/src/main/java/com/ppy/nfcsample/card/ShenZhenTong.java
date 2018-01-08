@@ -12,9 +12,15 @@ public class ShenZhenTong extends DefaultCardInfo {
      * 解析卡片信息,未判断9000
      *
      */
-    public void parseCardInfo(byte[] src) {
-        int number = Util.hexToInt(src, 19, 4);
-        cardNumber = String.valueOf(number);
+    public boolean parseCardInfo(byte[] src) {
+        try {
+            int number = Util.hexToIntLittleEndian(src, 19, 4);
+            cardNumber = String.valueOf(number);
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+        }
     }
 
     /**
@@ -22,7 +28,13 @@ public class ShenZhenTong extends DefaultCardInfo {
      *
      * @param src 原始16进制数据
      */
-    public void parseCardBalance(byte[] src) {
-        balance = Util.hexToInt(src, 1, src.length - 2 - 1);
+    public boolean parseCardBalance(byte[] src) {
+        try {
+            balance = Util.hexToInt(src, 1, src.length - 2 - 1);
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+        }
     }
 }
