@@ -1,16 +1,19 @@
 package com.ppy.nfcsample;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ppy.nfclib.CardOperatorListener;
 import com.ppy.nfclib.NfcCardReaderManager;
@@ -47,32 +50,35 @@ public class MainActivity extends AppCompatActivity {
         public void onCardConnected(boolean isConnected) {
             System.out.println(Thread.currentThread().getName());
             if (isConnected) {
-                try {
-                    execute();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mLlReadCard.setVisibility(View.VISIBLE);
-                            mLlShowCard.setVisibility(View.GONE);
-                        }
-                    });
-                }
+                execute();
             }
         }
 
         @Override
         public void onException(int code, String message) {
-            System.out.println(message);
             if (code == 1) {
-                Util.intentToNfcSetting(MainActivity.this);
+                showDialog("NFC设备", "NFC未打开，前往打开？", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dismissDialog();
+                        Util.intentToNfcSetting(MainActivity.this);
+                    }
+                });
+            }
+
+            if (code == 0) {
+                showDialog("NFC设备", "设备不支持NFC", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dismissDialog();
+                    }
+                });
             }
         }
     };
 
     private CardClient mCardClient;
-
+    private Dialog mDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -155,6 +161,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        dismissDialog();
         mReaderManager.onDestroy();
     }
 
@@ -164,13 +171,40 @@ public class MainActivity extends AppCompatActivity {
         mReaderManager.onNewIntent(intent);
     }
 
-    private void execute() throws IOException {
-        final DefaultCardInfo cardInfo = mCardClient.execute();
+    private void execute() {
+        dismissDialog();
+        final DefaultCardInfo cardInfo;
+        try {
+            cardInfo = mCardClient.execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    showDialog("读卡失败", "请重新贴紧卡片", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dismissDialog();
+                            mLlShowCard.setVisibility(View.GONE);
+                            mLlReadCard.setVisibility(View.VISIBLE);
+                        }
+                    });
+                }
+            });
+            return;
+        }
         if (cardInfo == null){
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(MainActivity.this, "not support", Toast.LENGTH_SHORT).show();
+                    showDialog("读卡失败", "暂不支持此类卡片", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dismissDialog();
+                            mLlShowCard.setVisibility(View.GONE);
+                            mLlReadCard.setVisibility(View.VISIBLE);
+                        }
+                    });
                 }
             });
             return;
@@ -194,5 +228,38 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void showDialog(String title, String content, View.OnClickListener listener) {
+        dismissDialog();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View view = inflater.inflate(R.layout.dialog_tag_lost, null);
+        TextView tvTitle = (TextView) view.findViewById(R.id.dialog_title);
+        TextView tvContent = (TextView) view.findViewById(R.id.dialog_content);
+        tvTitle.setText(title);
+        tvContent.setText(content);
+        Button btnCancel = (Button) view.findViewById(R.id.btn_cancel);
+        Button btnOk = (Button) view.findViewById(R.id.btn_confirm);
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismissDialog();
+            }
+        });
+        btnOk.setOnClickListener(listener);
+
+        builder.setView(view);
+        mDialog = builder.create();
+        mDialog.setCancelable(false);
+        mDialog.setCanceledOnTouchOutside(false);
+        mDialog.show();
+    }
+
+    private void dismissDialog() {
+        if (mDialog != null && mDialog.isShowing()) {
+            mDialog.dismiss();
+            mDialog = null;
+        }
     }
 }

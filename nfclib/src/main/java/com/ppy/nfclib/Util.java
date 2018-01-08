@@ -112,6 +112,7 @@ public class Util {
      * 判断手机NFC是否开启
      * <p>
      *     OPPO A37m 发现必须同时开启NFC以及Android Beam才可以使用
+     *     20180108 发现OPPO单独打开NFC即可读取标签，不清楚是否是系统更新
      * </p>
      *
      * @param context {@link Context}
@@ -119,9 +120,9 @@ public class Util {
      */
     public static boolean isNfcEnable(Context context) {
         NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(context);
-        if (Build.MANUFACTURER.toUpperCase().contains("OPPO")) {
-            return nfcAdapter.isEnabled() && isAndroidBeamEnable(context);
-        }
+//        if (Build.MANUFACTURER.toUpperCase().contains("OPPO")) {
+//            return nfcAdapter.isEnabled() && isAndroidBeamEnable(context);
+//        }
         return nfcAdapter != null && nfcAdapter.isEnabled();
     }
 
