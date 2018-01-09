@@ -17,6 +17,7 @@ public class NfcCardReaderManager implements INfcCardReader{
     private Activity mActivity;
     private CardReader mCardReader;
     private boolean enableSound = true;
+    private int mDelay;
     private CardOperatorListener mCardOperatorListener;
 
     private CardReaderHandler mHandler = new CardReaderHandler() {
@@ -53,6 +54,7 @@ public class NfcCardReaderManager implements INfcCardReader{
         }
         enableSound = builder.enableSound;
         mCardReader.enablePlatformSound(enableSound);
+        mCardReader.setReaderPresenceCheckDelay(builder.mDelay);
         mCardReader.setOnCardReaderHandler(mHandler);
     }
 
@@ -120,19 +122,17 @@ public class NfcCardReaderManager implements INfcCardReader{
         private Activity mActivity;
         private CardReader mCardReader;
         private boolean enableSound;
+        private int mDelay;
 
-        public Builder() {
+        public Builder(Activity activity) {
+            mActivity = activity;
         }
 
         public Builder(NfcCardReaderManager copy) {
             this.mActivity = copy.mActivity;
             this.mCardReader = copy.mCardReader;
             this.enableSound = copy.enableSound;
-        }
-
-        public Builder mActivity(Activity val) {
-            mActivity = val;
-            return this;
+            this.mDelay = copy.mDelay;
         }
 
         public Builder mCardReader(CardReader val) {
@@ -142,6 +142,14 @@ public class NfcCardReaderManager implements INfcCardReader{
 
         public Builder enableSound(boolean val) {
             enableSound = val;
+            return this;
+        }
+
+        public Builder setReaderPresenceCheckDelay(int delay) {
+            if (delay < 0) {
+                delay = 0;
+            }
+            mDelay = delay;
             return this;
         }
 

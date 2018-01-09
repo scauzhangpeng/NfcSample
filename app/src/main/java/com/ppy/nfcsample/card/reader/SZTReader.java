@@ -39,16 +39,6 @@ public class SZTReader extends BaseReader implements IReader {
         cmds.add(dir_srv_info);
         cmds.add(balance);
 
-
-        for (int i = 0; i < cmds.size(); i++) {
-            System.out.print("指令:" + Commands.ByteArrayToHexString(cmds.get(i).getCmd()));
-            byte[] resp = mReaderManager.tranceive(cmds.get(i).getCmd());
-            cmds.get(i).setResp(resp);
-            System.out.println("  响应:" + Commands.ByteArrayToHexString(resp));
-            if (!isSuccess(resp) && !cmds.get(i).isContinue()) {
-                return null;
-            }
-        }
        cmds = executeCommands(mReaderManager, cmds);
         if (cmds == null || cmds.size() < 3) {
             return null;

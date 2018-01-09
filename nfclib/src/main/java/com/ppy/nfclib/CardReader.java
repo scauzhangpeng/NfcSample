@@ -122,6 +122,10 @@ public class CardReader {
 
     }
 
+    protected void setReaderPresenceCheckDelay(int delay) {
+
+    }
+
     protected byte[] transceive(byte[] data) throws IOException {
         if (mIsoDep == null) {
             throw new TagLostException("Iso is null");

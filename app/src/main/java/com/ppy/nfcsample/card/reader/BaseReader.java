@@ -5,6 +5,7 @@ import com.ppy.nfcsample.card.Commands;
 import com.ppy.nfcsample.card.Iso7816;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -31,17 +32,27 @@ public class BaseReader {
     }
 
     protected List<Iso7816> executeCommands(NfcCardReaderManager mReader, List<Iso7816> commands) throws IOException {
+        List<Iso7816> resp = new ArrayList<>();
         for (Iso7816 command : commands) {
-            byte[] cmd = command.getCmd();
-            System.out.print("指令:" + Commands.ByteArrayToHexString(cmd));
-            byte[] resp = mReader.tranceive(cmd);
-            System.out.println("  响应:" + Commands.ByteArrayToHexString(resp));
-            command.setResp(resp);
-            if (!isSuccess(resp) && !command.isContinue()) {
+            Iso7816 iso7816 = executeSingleCommand(mReader, command);
+            if (iso7816 == null) {
                 return null;
             }
+            resp.add(iso7816);
         }
-        return commands;
+        return resp;
+    }
+
+    protected Iso7816 executeSingleCommand(NfcCardReaderManager mReader, Iso7816 command) throws IOException {
+        byte[] cmd = command.getCmd();
+        System.out.print("指令:" + Commands.ByteArrayToHexString(cmd));
+        byte[] resp = mReader.tranceive(cmd);
+        System.out.println("  响应:" + Commands.ByteArrayToHexString(resp));
+        command.setResp(resp);
+        if (!isSuccess(resp) && !command.isContinue()) {
+            return null;
+        }
+        return command;
     }
 
 }

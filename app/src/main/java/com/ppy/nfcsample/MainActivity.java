@@ -116,9 +116,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initNfcCardReader() {
-        mReaderManager = new NfcCardReaderManager.Builder()
-                .mActivity(this)
+        mReaderManager = new NfcCardReaderManager.Builder(this)
                 .enableSound(false)
+//                .setReaderPresenceCheckDelay(30000)
                 .build();
         mReaderManager.setOnCardOperatorListener(mCardOperatorListener);
     }
@@ -217,12 +217,14 @@ public class MainActivity extends AppCompatActivity {
                 if (cardInfo.getType() == 0) {
                     mTvCardNumber.setText("羊城通卡号:" + cardInfo.getCardNumber());
                     mTvCardBalance.setText("余额：" + Util.toAmountString(cardInfo.getBalance()));
+                    mCardRecords.clear();
                     mCardRecords.addAll(cardInfo.getRecords());
                     mAdapter.notifyDataSetChanged();
                 }
                 if (cardInfo.getType() == 1) {
                     mTvCardNumber.setText("深圳通卡号:" + cardInfo.getCardNumber());
                     mTvCardBalance.setText("余额：" + Util.toAmountString(cardInfo.getBalance()));
+                    mCardRecords.clear();
                     mCardRecords.addAll(cardInfo.getRecords());
                     mAdapter.notifyDataSetChanged();
                 }
