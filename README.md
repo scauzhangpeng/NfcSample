@@ -14,7 +14,7 @@ NFC库，兼容4.3之前API以及4.4之后的API，读卡器模式，Sample读�
 |nexus 6(5.0)|mate8 QQ-卡号|mate8 QQ-记录|
 |<img src="http://o7ukzo7vj.bkt.clouddn.com/nfcNexus6.png" width="300"/>|<img src="http://o7ukzo7vj.bkt.clouddn.com/nfcmate8-qq-card.png" width="300"/>|<img src="http://o7ukzo7vj.bkt.clouddn.com/nfcmate8-qq-record.png" width="300"/>|
 ## 如何使用本库
-1.使用Gradle依赖（先原谅我还没写完这个库，也不会上传）  
+1.使用Gradle依赖 
 
 ```
 compile 'com.ppy:nfclib:1.0.0'
