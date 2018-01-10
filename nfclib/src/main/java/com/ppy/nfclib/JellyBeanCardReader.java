@@ -9,7 +9,7 @@ import android.nfc.tech.NfcF;
 
 /**
  * Created by ZP on 2017/9/20.
- * API < 19 NFC读卡器模式
+ * API 小于 19 NFC读卡器模式
  */
 
 public class JellyBeanCardReader extends CardReader {

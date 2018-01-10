@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "26.0.1"
+    buildToolsVersion "26.0.2"
     defaultConfig {
         applicationId "com.ppy.nfcsample"
         minSdkVersion 15
@@ -28,5 +28,6 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:recyclerview-v7:25.3.1'
-    compile project(':nfclib')
+//    compile project(':nfclib')
+    compile 'com.ppy:nfclib:1.0.0'
 }
