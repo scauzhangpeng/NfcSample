@@ -146,10 +146,10 @@ private void initNfcCardReader() {
 [谷歌官网NFC卡模拟](https://developer.android.google.cn/guide/topics/connectivity/nfc/hce.html)
 
 ## 联系作者
-本库关注的人并不多，目前也处于稳定使用，不定期佛性更新状态，如有bug或者需求不满足需要改的可以联系我
-写这个库由于之前工作中经常用NFC读写ETC卡(粤通卡、赣通卡、蒙通卡等)，也短暂搞过读银行卡卡号，读城市交通卡(羊城通、深圳通)都是我看一些资料后写的。
-博客：https://blog.csdn.net/scau_zhangpeng/article/details/70162775
-Email：scau_zhangpeng@163.com
+本库关注的人并不多，目前也处于稳定使用，不定期佛性更新状态，如有bug或者需求不满足需要改的可以联系我  
+写这个库由于之前工作中经常用NFC读写ETC卡(粤通卡、赣通卡、蒙通卡等)，也短暂搞过读银行卡卡号，读城市交通卡(羊城通、深圳通)都是我看一些资料后写的。  
+博客：https://blog.csdn.net/scau_zhangpeng/article/details/70162775  
+Email：scau_zhangpeng@163.com  
 
 |微信|QQ|
 |----|----|
