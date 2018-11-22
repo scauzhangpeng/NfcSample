@@ -10,9 +10,9 @@ NFC库，兼容4.3之前API以及4.4之后的API，读卡器模式，Sample读�
 ## 截图
 |sony xm50t(4.3)|oppo A37m(5.1)|锤子 坚果pro(7.1.1)|
 |---------------|--------------|------------------|
-|<img src="http://o7ukzo7vj.bkt.clouddn.com/nfcsonyXM50t.jpg" width="300"/>|<img src="http://o7ukzo7vj.bkt.clouddn.com/nfcoppoA37m.png" width="300"/>|<img src="http://o7ukzo7vj.bkt.clouddn.com/nfc%E9%94%A4%E5%AD%90%E5%9D%9A%E6%9E%9Cpro.png" width="300"/>|
+|<img src="https://github.com/scauzhangpeng/NfcSample/blob/master/screenshot/sony_xm50t(4.3).jpg" width="300"/>|<img src="https://github.com/scauzhangpeng/NfcSample/blob/master/screenshot/oppo_A37m(5.1).jpg" width="300"/>|<img src="https://github.com/scauzhangpeng/NfcSample/blob/master/screenshot/smartisan_pro(7.1.1).jpg" width="300"/>|
 |nexus 6(5.0)|mate8 QQ-卡号|mate8 QQ-记录|
-|<img src="http://o7ukzo7vj.bkt.clouddn.com/nfcNexus6.png" width="300"/>|<img src="http://o7ukzo7vj.bkt.clouddn.com/nfcmate8-qq-card.png" width="300"/>|<img src="http://o7ukzo7vj.bkt.clouddn.com/nfcmate8-qq-record.png" width="300"/>|
+|<img src="https://github.com/scauzhangpeng/NfcSample/blob/master/screenshot/nexus_6(5.0).jpg" width="300"/>|<img src="https://github.com/scauzhangpeng/NfcSample/blob/master/screenshot/mate8_QQ-card_number.jpg" width="300"/>|<img src="https://github.com/scauzhangpeng/NfcSample/blob/master/screenshot/mate8_QQ-record.jpg" width="300"/>|
 ## 如何使用本库
 1.使用Gradle依赖 
 
@@ -116,7 +116,7 @@ private void initNfcCardReader() {
  
  - OPPO A37m机型需要同时开启NFC以及Android Beam，论坛也有人反馈，但是目前本人测试后并不需要，但是QQ读卡需要同时开启，目前不清楚。
  (版本号：A37m_11_A.23_171025,内核版本：3.10.72-G201710251842,基带版本：MOLY.LR11.W1539.MD.TC16.JAD.SP.V1.P31.T47,2017/10/13 16:19)
- <img src = "http://o7ukzo7vj.bkt.clouddn.com/nfcoppo-bug.png" width = "900"/>
+ <img src = "https://github.com/scauzhangpeng/NfcSample/blob/master/screenshot/oppo-bug.jpg" width = "900"/>
  
  - 已测试机型如下表：
  
