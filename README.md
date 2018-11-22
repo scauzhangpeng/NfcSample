@@ -144,3 +144,11 @@ private void initNfcCardReader() {
 [谷歌官网NFC基础知识](https://developer.android.google.cn/guide/topics/connectivity/nfc/nfc.html)  
 [谷歌官网NFC进阶知识](https://developer.android.google.cn/guide/topics/connectivity/nfc/advanced-nfc.html)  
 [谷歌官网NFC卡模拟](https://developer.android.google.cn/guide/topics/connectivity/nfc/hce.html)
+
+## 联系作者
+本库关注的人并不多，目前也处于不更新状态，如有bug或者需求不满足需要改的可以联系我
+Email：scau_zhangpeng@163.com
+
+|微信|QQ|
+|----|----|
+|<img src = "https://github.com/scauzhangpeng/NfcSample/blob/master/screenshot/mmqrcode1542869847836.png" width = "200"/>|<img src = "https://github.com/scauzhangpeng/NfcSample/blob/master/screenshot/IMG_20181122_150644.jpg" width = "200"/>|
