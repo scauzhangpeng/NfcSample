@@ -127,6 +127,7 @@ private void initNfcCardReader() {
 |锤子坚果pro|7.1.1|smartisan v3.5.2|
 |nexus 6|5.0/5.1.1/6.0.1/7.1.1|~|
 |mate 8|7.1.1|EMUI 5.0|
+|p20 pro|8.1.0|EMUI 8.1.0|
 |....希望大家一起测试完善|....|....|
 
 
