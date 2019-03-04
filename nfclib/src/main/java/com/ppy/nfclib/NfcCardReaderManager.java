@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
+import android.util.Log;
 
 import java.io.IOException;
 
@@ -58,6 +59,10 @@ public class NfcCardReaderManager implements INfcCardReader{
         mCardReader.setOnCardReaderHandler(mHandler);
     }
 
+    @Override
+    public void onCreate(Intent intent) {
+        dispatchIntent(intent);
+    }
 
     @Override
     public void onStart(Activity activity) {
@@ -83,9 +88,17 @@ public class NfcCardReaderManager implements INfcCardReader{
     }
     @Override
     public void onNewIntent(Intent intent) {
+        dispatchIntent(intent);
+    }
+
+    private void dispatchIntent(Intent intent) {
         if (intent != null) {
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-            mCardReader.dispatchTag(tag);
+            if (tag != null) {
+                mCardReader.dispatchTag(tag);
+            } else {
+                Log.d("NfcCardReaderManager", "dispatchIntent: tag is null");
+            }
         }
     }
 

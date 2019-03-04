@@ -81,11 +81,13 @@ public class MainActivity extends AppCompatActivity {
     private Dialog mDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate: ");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initViews();
         initNfcCardReader();
         initCardClient();
+        mReaderManager.onCreate(getIntent());
     }
 
     private void initViews() {
@@ -160,6 +162,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        Log.d(TAG, "onDestroy: ");
         super.onDestroy();
         dismissDialog();
         mReaderManager.onDestroy();
@@ -168,6 +171,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        Log.d(TAG, "onNewIntent: " + intent.getAction());
         mReaderManager.onNewIntent(intent);
     }
 

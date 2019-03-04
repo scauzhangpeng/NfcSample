@@ -60,8 +60,7 @@ public class CardReader {
     }
 
     protected synchronized void dispatchTag(Tag tag) {
-        Log.d(TAG, "dispatchTag: ");
-        System.out.println(Arrays.toString(tag.getTechList()));
+        Log.d(TAG, "dispatchTag: " + Arrays.toString(tag.getTechList()));
         if (Arrays.toString(tag.getTechList()).contains(IsoDep.class.getName())) {
             connectCard(tag);
         }

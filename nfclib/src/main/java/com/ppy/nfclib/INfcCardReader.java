@@ -12,6 +12,8 @@ import java.io.IOException;
 
 public interface INfcCardReader {
 
+    public void onCreate(Intent intent);
+
     public void onStart(Activity activity);
 
     public void onResume();
