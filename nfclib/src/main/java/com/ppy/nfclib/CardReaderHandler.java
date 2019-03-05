@@ -7,11 +7,13 @@ package com.ppy.nfclib;
 public interface CardReaderHandler {
 
     /**
-     *
-     *
+     * 手机不支持NFC.
      */
     void onNfcNotExit();
 
+    /**
+     * 手机支持NFC,但未开启.
+     */
     void onNfcNotEnable();
 
     /**
