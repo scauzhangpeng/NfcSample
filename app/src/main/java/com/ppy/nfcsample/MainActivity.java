@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.ppy.nfclib.CardOperatorListener;
 import com.ppy.nfclib.NfcCardReaderManager;
+import com.ppy.nfclib.NfcStatusChangeBroadcastReceiver;
 import com.ppy.nfclib.Util;
 import com.ppy.nfcsample.adapter.RiotGameAdapter;
 import com.ppy.nfcsample.adapter.RiotGameViewHolder;
@@ -77,6 +78,26 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    private NfcStatusChangeBroadcastReceiver mNfcStatusChangeBroadcastReceiver = new NfcStatusChangeBroadcastReceiver() {
+        @Override
+        protected void doOnNfcOn() {
+            super.doOnNfcOn();
+            dismissDialog();
+        }
+
+        @Override
+        protected void doOnNfcOff() {
+            super.doOnNfcOff();
+            showDialog("接收到系统广播", "Nfc已经关闭，前往打开？", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dismissDialog();
+                    Util.intentToNfcSetting(MainActivity.this);
+                }
+            });
+        }
+    };
+
     private CardClient mCardClient;
     private Dialog mDialog;
     @Override
@@ -88,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
         initNfcCardReader();
         initCardClient();
         mReaderManager.onCreate(getIntent());
+        registerReceiver(mNfcStatusChangeBroadcastReceiver, NfcStatusChangeBroadcastReceiver.getNfcBroadcastReceiverIntentFilter());
     }
 
     private void initViews() {
@@ -166,6 +188,7 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         dismissDialog();
         mReaderManager.onDestroy();
+        unregisterReceiver(mNfcStatusChangeBroadcastReceiver);
     }
 
     @Override
