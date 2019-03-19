@@ -9,8 +9,8 @@ import android.util.SparseArray;
 public class ExceptionConstant {
 
     protected static final SparseArray<String> mNFCException = new SparseArray<>();
-    protected static final int NFC_NOT_EXIT = 0;
-    protected static final int NFC_NOT_ENABLE = 1;
+    public static final int NFC_NOT_EXIT = 0;
+    public static final int NFC_NOT_ENABLE = 1;
 
     static {
         mNFCException.put(NFC_NOT_EXIT, "do not support nfc");

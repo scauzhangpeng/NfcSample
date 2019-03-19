@@ -12,7 +12,7 @@ import java.util.List;
  * Created by ZP on 2017/8/8.
  */
 
-public abstract class RiotGameAdapter<T> extends RecyclerView.Adapter<RiotGameViewHolder> {
+public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder> {
 
     protected int mLayoutId;//布局id
     protected List<T> mDatas;//数据源
@@ -22,12 +22,12 @@ public abstract class RiotGameAdapter<T> extends RecyclerView.Adapter<RiotGameVi
     private OnItemClickListener mOnItemClickListener;
     private OnItemLongClickListener mOnItemLongClickListener;
 
-    public RiotGameAdapter(List<T> datas, Context context, MultipleTypeSupport<T> multipleTypeSupport) {
+    public BaseAdapter(List<T> datas, Context context, MultipleTypeSupport<T> multipleTypeSupport) {
         this(-1, datas, context);
         mMultipleTypeSupport = multipleTypeSupport;
     }
 
-    public RiotGameAdapter(int layoutId, List<T> datas, Context context) {
+    public BaseAdapter(int layoutId, List<T> datas, Context context) {
         this.mContext = context;
         this.mLayoutId = layoutId;
         this.mDatas = datas;
@@ -43,16 +43,16 @@ public abstract class RiotGameAdapter<T> extends RecyclerView.Adapter<RiotGameVi
     }
 
     @Override
-    public RiotGameViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (mMultipleTypeSupport != null) {
             mLayoutId = viewType;
         }
         View itemView = mInflater.inflate(mLayoutId, parent, false);
-        return new RiotGameViewHolder(itemView);
+        return new BaseViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(final RiotGameViewHolder holder, final int position) {
+    public void onBindViewHolder(final BaseViewHolder holder, final int position) {
         bindData(holder, mDatas.get(position), position);
         if (mOnItemClickListener != null) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -74,7 +74,7 @@ public abstract class RiotGameAdapter<T> extends RecyclerView.Adapter<RiotGameVi
         }
     }
 
-    protected abstract void bindData(RiotGameViewHolder holder, T t, int position);
+    protected abstract void bindData(BaseViewHolder holder, T t, int position);
 
     @Override
     public int getItemCount() {

@@ -1,10 +1,8 @@
 package com.ppy.nfcsample;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,12 +13,10 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.ppy.nfclib.CardOperatorListener;
-import com.ppy.nfclib.NfcCardReaderManager;
-import com.ppy.nfclib.NfcStatusChangeBroadcastReceiver;
+import com.ppy.nfclib.ExceptionConstant;
 import com.ppy.nfclib.Util;
-import com.ppy.nfcsample.adapter.RiotGameAdapter;
-import com.ppy.nfcsample.adapter.RiotGameViewHolder;
+import com.ppy.nfcsample.adapter.BaseAdapter;
+import com.ppy.nfcsample.adapter.BaseViewHolder;
 import com.ppy.nfcsample.card.DefaultCardInfo;
 import com.ppy.nfcsample.card.DefaultCardRecord;
 import com.ppy.nfcsample.card.reader.CardClient;
@@ -31,7 +27,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends NfcActivity {
 
     private static final String TAG = "MainActivity";
 
@@ -42,61 +38,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView mTvCardBalance;
 
     private RecyclerView mRvCardRecord;
-    private RiotGameAdapter<DefaultCardRecord> mAdapter;
+    private BaseAdapter<DefaultCardRecord> mAdapter;
     private List<DefaultCardRecord> mCardRecords;
-
-    private NfcCardReaderManager mReaderManager;
-    private CardOperatorListener mCardOperatorListener = new CardOperatorListener() {
-        @Override
-        public void onCardConnected(boolean isConnected) {
-            System.out.println(Thread.currentThread().getName());
-            if (isConnected) {
-                execute();
-            }
-        }
-
-        @Override
-        public void onException(int code, String message) {
-            if (code == 1) {
-                showDialog("NFC设备", "NFC未打开，前往打开？", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dismissDialog();
-                        Util.intentToNfcSetting(MainActivity.this);
-                    }
-                });
-            }
-
-            if (code == 0) {
-                showDialog("NFC设备", "设备不支持NFC", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dismissDialog();
-                    }
-                });
-            }
-        }
-    };
-
-    private NfcStatusChangeBroadcastReceiver mNfcStatusChangeBroadcastReceiver = new NfcStatusChangeBroadcastReceiver() {
-        @Override
-        protected void doOnNfcOn() {
-            super.doOnNfcOn();
-            dismissDialog();
-        }
-
-        @Override
-        protected void doOnNfcOff() {
-            super.doOnNfcOff();
-            showDialog("接收到系统广播", "Nfc已经关闭，前往打开？", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dismissDialog();
-                    Util.intentToNfcSetting(MainActivity.this);
-                }
-            });
-        }
-    };
 
     private CardClient mCardClient;
     private Dialog mDialog;
@@ -106,10 +49,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initViews();
-        initNfcCardReader();
         initCardClient();
-        mReaderManager.onCreate(getIntent());
-        registerReceiver(mNfcStatusChangeBroadcastReceiver, NfcStatusChangeBroadcastReceiver.getNfcBroadcastReceiverIntentFilter());
     }
 
     private void initViews() {
@@ -123,9 +63,9 @@ public class MainActivity extends AppCompatActivity {
         mRvCardRecord.setLayoutManager(new LinearLayoutManager(this));
         mRvCardRecord.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         mCardRecords = new ArrayList<>();
-        mAdapter = new RiotGameAdapter<DefaultCardRecord>(R.layout.item_card_record, mCardRecords, this) {
+        mAdapter = new BaseAdapter<DefaultCardRecord>(R.layout.item_card_record, mCardRecords, this) {
             @Override
-            protected void bindData(RiotGameViewHolder holder, DefaultCardRecord cardRecord, int position) {
+            protected void bindData(BaseViewHolder holder, DefaultCardRecord cardRecord, int position) {
                 holder.setText(R.id.tv_record_type, String.valueOf(cardRecord.getTypeName()));
                 holder.setText(R.id.tv_record_date, DateUtil.str2str(cardRecord.getDate(), DateUtil.MMddHHmmss, DateUtil.MM_dd_HH_mm));
                 String price = Util.toAmountString(cardRecord.getPrice());
@@ -139,14 +79,6 @@ public class MainActivity extends AppCompatActivity {
         mRvCardRecord.setAdapter(mAdapter);
     }
 
-    private void initNfcCardReader() {
-        mReaderManager = new NfcCardReaderManager.Builder(this)
-                .enableSound(false)
-//                .setReaderPresenceCheckDelay(30000)
-                .build();
-        mReaderManager.setOnCardOperatorListener(mCardOperatorListener);
-    }
-
     private void initCardClient() {
         mCardClient = new CardClient.Builder()
                 .nfcManager(mReaderManager)
@@ -156,46 +88,55 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        Log.d(TAG, "onStart: ");
-        mReaderManager.onStart(this);
-    }
-
-    @Override
-    protected void onResume() {
-        Log.d(TAG, "onResume: ");
-        super.onResume();
-        mReaderManager.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.d(TAG, "onPause: ");
-        mReaderManager.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.d(TAG, "onStop: ");
-    }
-
-    @Override
     protected void onDestroy() {
         Log.d(TAG, "onDestroy: ");
         super.onDestroy();
         dismissDialog();
-        mReaderManager.onDestroy();
-        unregisterReceiver(mNfcStatusChangeBroadcastReceiver);
     }
 
     @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        Log.d(TAG, "onNewIntent: " + intent.getAction());
-        mReaderManager.onNewIntent(intent);
+    public void doOnNfcOff() {
+        showDialog("接收到系统广播", "Nfc已经关闭，前往打开？", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismissDialog();
+                Util.intentToNfcSetting(MainActivity.this);
+            }
+        });
+    }
+
+    @Override
+    public void doOnNfcOn() {
+
+    }
+
+    @Override
+    public void doOnCardConnected(boolean isConnected) {
+        if (isConnected) {
+            execute();
+        }
+    }
+
+    @Override
+    public void doOnException(int code, String message) {
+        if (code == ExceptionConstant.NFC_NOT_ENABLE) {
+            showDialog("NFC设备", "NFC未打开，前往打开？", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dismissDialog();
+                    Util.intentToNfcSetting(MainActivity.this);
+                }
+            });
+        }
+
+        if (code == ExceptionConstant.NFC_NOT_EXIT) {
+            showDialog("NFC设备", "设备不支持NFC", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dismissDialog();
+                }
+            });
+        }
     }
 
     private void execute() {

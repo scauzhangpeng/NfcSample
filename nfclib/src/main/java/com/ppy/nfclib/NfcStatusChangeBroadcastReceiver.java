@@ -19,35 +19,35 @@ public class NfcStatusChangeBroadcastReceiver extends BroadcastReceiver {
                 int status = intent.getIntExtra(NfcAdapter.EXTRA_ADAPTER_STATE, NfcAdapter.STATE_OFF);
                 switch (status) {
                     case NfcAdapter.STATE_OFF:
-                        doOnNfcOff();
+                        onNfcOff();
                         break;
                     case NfcAdapter.STATE_ON:
-                        doOnNfcOn();
+                        onNfcOn();
                         break;
                     case NfcAdapter.STATE_TURNING_OFF:
-                        doOnNfcTurningOff();
+                        onNfcTurningOff();
                         break;
                     case NfcAdapter.STATE_TURNING_ON:
-                        doOnNfcTurningOn();
+                        onNfcTurningOn();
                         break;
                 }
             }
         }
     }
 
-    protected void doOnNfcTurningOn() {
+    protected void onNfcTurningOn() {
 
     }
 
-    protected void doOnNfcTurningOff() {
+    protected void onNfcTurningOff() {
 
     }
 
-    protected void doOnNfcOn() {
+    protected void onNfcOn() {
 
     }
 
-    protected void doOnNfcOff() {
+    protected void onNfcOff() {
 
     }
 

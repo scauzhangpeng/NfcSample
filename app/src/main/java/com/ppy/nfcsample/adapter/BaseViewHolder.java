@@ -10,11 +10,11 @@ import android.widget.TextView;
  * Created by ZP on 2017/8/8.
  */
 
-public class RiotGameViewHolder extends RecyclerView.ViewHolder {
+public class BaseViewHolder extends RecyclerView.ViewHolder {
 
     private SparseArray<View> mViews;
 
-    public RiotGameViewHolder(View itemView) {
+    public BaseViewHolder(View itemView) {
         super(itemView);
         mViews = new SparseArray<>();
     }
@@ -29,31 +29,31 @@ public class RiotGameViewHolder extends RecyclerView.ViewHolder {
         return (V) view;
     }
 
-    public RiotGameViewHolder setText(int id, String text) {
+    public BaseViewHolder setText(int id, String text) {
         TextView tv = getView(id);
         tv.setText(text);
         return this;
     }
 
-    public RiotGameViewHolder setImageResource(int viewId, int resId) {
+    public BaseViewHolder setImageResource(int viewId, int resId) {
         ImageView view = getView(viewId);
         view.setImageResource(resId);
         return this;
     }
 
-    public RiotGameViewHolder setImagePath(int viewId, AbstractImageLoader abstractImageLoader) {
+    public BaseViewHolder setImagePath(int viewId, AbstractImageLoader abstractImageLoader) {
         ImageView view = getView(viewId);
         abstractImageLoader.loadImage(view, abstractImageLoader.getPath());
         return this;
     }
 
-    public RiotGameViewHolder setVisibility(int viewId, int visibility) {
+    public BaseViewHolder setVisibility(int viewId, int visibility) {
         View view = getView(viewId);
         view.setVisibility(visibility);
         return this;
     }
 
-    public RiotGameViewHolder setOnItemClickListener(View.OnClickListener listener) {
+    public BaseViewHolder setOnItemClickListener(View.OnClickListener listener) {
         itemView.setOnClickListener(listener);
         return this;
     }
