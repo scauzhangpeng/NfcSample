@@ -151,6 +151,7 @@ public class Util {
      * 跳转至系统NFC设置界面.
      *
      * @param context {@link Context}
+     * @return {@code true} 跳转成功 <br> {@code false} 跳转失败
      */
     public static boolean intentToNfcSetting(Context context) {
         if (isNfcExits(context)) {
@@ -166,6 +167,7 @@ public class Util {
      * 跳转至系统NFC Android Beam设置界面，同页面基本都有NFC开关.
      *
      * @param context {@link Context}
+     * @return {@code true} 跳转成功 <br> {@code false} 跳转失败
      */
     public static boolean intentToNfcShare(Context context) {
         if (isAndroidBeamExits(context)) {
