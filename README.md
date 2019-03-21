@@ -1,7 +1,7 @@
 # NfcSample
 NFC库，兼容4.3之前API以及4.4之后的API，读卡器模式，Sample读取羊城通卡号、余额、交易记录
 
-[ ![NFClib](https://img.shields.io/badge/NFClib-1.0.1-blue.svg) ](https://bintray.com/scauzhangpeng/NFCLib/nfclib/1.0.1/link)
+[ ![NFClib](https://img.shields.io/badge/NFClib-1.0.2-blue.svg) ](https://bintray.com/scauzhangpeng/NFCLib/nfclib/1.0.2/link)
 
 >无意中从事C++开发的龙腿和我聊起适配，萌发了我想写各种各样的Android适配方面的东西，这个库算是一个开端，适配不同版本(4.4之前和之后)的NFC（读卡器模式）
 
@@ -19,7 +19,7 @@ NFC库，兼容4.3之前API以及4.4之后的API，读卡器模式，Sample读�
 1.使用Gradle依赖 
 
 ```
-compile 'com.ppy:nfclib:1.0.1'
+compile 'com.ppy:nfclib:1.0.2'
 ```
 
 2.初始化  
