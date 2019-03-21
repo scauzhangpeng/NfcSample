@@ -107,7 +107,7 @@ public class MainActivity extends NfcActivity {
 
     @Override
     public void doOnNfcOn() {
-
+        dismissDialog();
     }
 
     @Override

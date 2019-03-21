@@ -148,30 +148,48 @@ public class Util {
     }
 
     /**
-     * 跳转至系统NFC设置界面，不准确
+     * 跳转至系统NFC设置界面.
      *
      * @param context {@link Context}
      */
-    public static void intentToNfcSetting(Context context) {
+    public static boolean intentToNfcSetting(Context context) {
         if (isNfcExits(context)) {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                Intent intent = new Intent(Settings.ACTION_NFC_SETTINGS);
-                context.startActivity(intent);
+                return toIntent(context, Settings.ACTION_NFC_SETTINGS);
             }
         }
+        return false;
 
     }
 
     /**
-     * 跳转至系统NFC Android Beam设置界面，同页面基本都有NFC开关，建议采用
+     * 跳转至系统NFC Android Beam设置界面，同页面基本都有NFC开关.
      *
      * @param context {@link Context}
      */
-    public static void intentToNfcShare(Context context) {
+    public static boolean intentToNfcShare(Context context) {
         if (isAndroidBeamExits(context)) {
-            Intent intent = new Intent(Settings.ACTION_NFCSHARING_SETTINGS);
-            context.startActivity(intent);
+            return toIntent(context, Settings.ACTION_NFCSHARING_SETTINGS);
         }
+        return false;
     }
+
+    /**
+     * 跳转方法.
+     * @param context {@link Context}
+     * @param action 意图
+     * @return 是否跳转成功 {@code true } 成功<br>{@code false}失败
+     */
+    private static boolean toIntent(Context context, String action) {
+        try {
+            Intent intent = new Intent(action);
+            context.startActivity(intent);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
 
 }

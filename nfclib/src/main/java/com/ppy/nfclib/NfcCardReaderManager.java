@@ -82,6 +82,7 @@ public class NfcCardReaderManager implements INfcCardReader{
     @Override
     public void onDestroy() {
         if (mCardReader != null) {
+            mCardReader.stopCheckThread();
             mCardReader = null;
             mActivity = null;
         }
