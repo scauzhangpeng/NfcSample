@@ -1,6 +1,7 @@
 package com.ppy.nfcsample;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DividerItemDecoration;
@@ -9,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -24,6 +26,7 @@ import com.ppy.nfcsample.card.reader.SZTReader;
 import com.ppy.nfcsample.card.reader.YCTReader;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,8 +92,8 @@ public class MainActivity extends NfcActivity {
 
     @Override
     protected void onDestroy() {
-        Log.d(TAG, "onDestroy: ");
         super.onDestroy();
+        fixInputMethodManagerLeak(this);
         dismissDialog();
     }
 
@@ -230,6 +233,39 @@ public class MainActivity extends NfcActivity {
         if (mDialog != null && mDialog.isShowing()) {
             mDialog.dismiss();
             mDialog = null;
+        }
+    }
+
+    public static void fixInputMethodManagerLeak(Context destContext) {
+        if (destContext == null) {
+            return;
+        }
+
+        InputMethodManager imm = (InputMethodManager) destContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm == null) {
+            return;
+        }
+
+        String[] arr = new String[]{"mCurRootView", "mServedView", "mNextServedView", "mLastSrvView"};
+        Field f = null;
+        Object obj_get = null;
+        for (int i = 0; i < arr.length; i++) {
+            String param = arr[i];
+            try {
+                f = imm.getClass().getDeclaredField(param);
+                if (!f.isAccessible()) {
+                    f.setAccessible(true);
+                }
+                obj_get = f.get(imm);
+                if (obj_get instanceof View) {
+                    View v_get = (View) obj_get;
+                    if (v_get.getContext() == destContext || param.equals("mLastSrvView")) { // 被InputMethodManager持有引用的context是想要目标销毁的
+                        f.set(imm, null); // 置空，破坏掉path to gc节点
+                    }
+                }
+            } catch (Throwable t) {
+                t.printStackTrace();
+            }
         }
     }
 }
