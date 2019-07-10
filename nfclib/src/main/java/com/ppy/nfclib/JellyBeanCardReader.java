@@ -8,8 +8,8 @@ import android.nfc.tech.IsoDep;
 import android.nfc.tech.NfcF;
 
 /**
+ * API 小于 19 NFC读卡器模式.
  * Created by ZP on 2017/9/20.
- * API 小于 19 NFC读卡器模式
  */
 
 public class JellyBeanCardReader extends CardReader {
@@ -26,8 +26,8 @@ public class JellyBeanCardReader extends CardReader {
     @Override
     protected void enableCardReader() {
         super.enableCardReader();
-        String[][] techListsArray = new String[][] { new String[] { NfcF.class.getName() },
-                new String[] {IsoDep.class.getName()} };
+        String[][] techListsArray = new String[][]{new String[]{NfcF.class.getName()},
+                new String[]{IsoDep.class.getName()}};
         if (mDefaultAdapter != null) {
             mDefaultAdapter.enableForegroundDispatch(mActivity, mPendingIntent, null, techListsArray);
         }

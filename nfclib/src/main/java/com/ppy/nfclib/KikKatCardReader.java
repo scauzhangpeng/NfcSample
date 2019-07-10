@@ -8,8 +8,8 @@ import android.os.Build;
 import android.os.Bundle;
 
 /**
+ * API 大于等于 19 NFC读卡器模式.
  * Created by ZP on 2017/9/20.
- * API 大于等于 19 NFC读卡器模式
  */
 @TargetApi(Build.VERSION_CODES.KITKAT)
 public class KikKatCardReader extends CardReader {

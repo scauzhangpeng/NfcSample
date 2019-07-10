@@ -9,8 +9,8 @@ import android.provider.Settings;
 import java.util.Locale;
 
 /**
+ * NFC相关工具类.
  * Created by ZP on 2017/9/20.
- * NFC相关工具类
  */
 
 public class Util {
@@ -22,10 +22,10 @@ public class Util {
      * @return String, containing hexadecimal representation.
      */
     public static String ByteArrayToHexString(byte[] bytes) {
-        final char[] hexArray = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+        final char[] hexArray = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
         char[] hexChars = new char[bytes.length * 2];
         int v;
-        for ( int j = 0; j < bytes.length; j++ ) {
+        for (int j = 0; j < bytes.length; j++) {
             v = bytes[j] & 0xFF;
             hexChars[j * 2] = hexArray[v >>> 4];
             hexChars[j * 2 + 1] = hexArray[v & 0x0F];
@@ -46,13 +46,13 @@ public class Util {
         byte[] data = new byte[len / 2];
         for (int i = 0; i < len; i += 2) {
             data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
-                    + Character.digit(s.charAt(i+1), 16));
+                    + Character.digit(s.charAt(i + 1), 16));
         }
         return data;
     }
 
     /**
-     * 金额单位转换，分转元
+     * 金额单位转换，分转元.
      *
      * @param value 金额，单位分
      * @return 金额， 单位元
@@ -62,11 +62,11 @@ public class Util {
     }
 
     /**
-     * 16进制转10进制
+     * 16进制转10进制.
      *
-     * @param hex 16进制
+     * @param hex        16进制
      * @param startIndex 起始下标
-     * @param len 长度, 按字符算
+     * @param len        长度, 按字符算
      * @return 10进制
      */
     public static int hexToInt(byte[] hex, int startIndex, int len) {
@@ -79,8 +79,9 @@ public class Util {
         }
         return ret;
     }
+
     /**
-     * 16进制转10进制 (小端模式)
+     * 16进制转10进制 (小端模式).
      *
      * @param b 16进制
      * @param s 起始下标
@@ -98,7 +99,7 @@ public class Util {
 
 
     /**
-     * 判断手机是否具备NFC功能
+     * 判断手机是否具备NFC功能.
      *
      * @param context {@link Context}
      * @return {@code true}: 具备 {@code false}: 不具备
@@ -109,10 +110,10 @@ public class Util {
     }
 
     /**
-     * 判断手机NFC是否开启
+     * 判断手机NFC是否开启.
      * <p>
-     *     OPPO A37m 发现必须同时开启NFC以及Android Beam才可以使用
-     *     20180108 发现OPPO单独打开NFC即可读取标签，不清楚是否是系统更新
+     * OPPO A37m 发现必须同时开启NFC以及Android Beam才可以使用
+     * 20180108 发现OPPO单独打开NFC即可读取标签，不清楚是否是系统更新
      * </p>
      *
      * @param context {@link Context}
@@ -127,7 +128,7 @@ public class Util {
     }
 
     /**
-     * 判断手机NFC的Android Beam是否开启，在API 16之后才有
+     * 判断手机NFC的Android Beam是否开启，在API 16之后才有.
      *
      * @param context {@link Context}
      * @return {@code true}: 已开启 {@code false}: 未开启
@@ -138,7 +139,7 @@ public class Util {
     }
 
     /**
-     * 判断手机是否具备Android Beam
+     * 判断手机是否具备Android Beam.
      *
      * @param context {@link Context}
      * @return {@code true}:具备 {@code false}:不具备
@@ -178,8 +179,9 @@ public class Util {
 
     /**
      * 跳转方法.
+     *
      * @param context {@link Context}
-     * @param action 意图
+     * @param action  意图
      * @return 是否跳转成功 {@code true } 成功<br>{@code false}失败
      */
     private static boolean toIntent(Context context, String action) {

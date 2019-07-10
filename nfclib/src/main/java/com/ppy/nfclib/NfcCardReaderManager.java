@@ -9,11 +9,11 @@ import android.util.Log;
 import java.io.IOException;
 
 /**
+ * NFC管理类，外层调用只需要与本类交互.
  * Created by ZP on 2017/9/20.
- * NFC管理类，外层调用只需要与本类交互
  */
 
-public class NfcCardReaderManager implements INfcCardReader{
+public class NfcCardReaderManager implements INfcCardReader {
 
     private Activity mActivity;
     private CardReader mCardReader;
@@ -70,6 +70,11 @@ public class NfcCardReaderManager implements INfcCardReader{
     }
 
     @Override
+    public void onStop() {
+
+    }
+
+    @Override
     public void onResume() {
         mCardReader.enableCardReader();
     }
@@ -87,6 +92,7 @@ public class NfcCardReaderManager implements INfcCardReader{
             mActivity = null;
         }
     }
+
     @Override
     public void onNewIntent(Intent intent) {
         dispatchIntent(intent);

@@ -5,8 +5,8 @@ import android.content.Intent;
 import java.io.IOException;
 
 /**
+ * NFC调用相关接口.
  * Created by ZP on 2017/9/20.
- * NFC调用相关接口
  */
 
 public interface INfcCardReader {
@@ -18,6 +18,8 @@ public interface INfcCardReader {
     public void onResume();
 
     public void onPause();
+
+    public void onStop();
 
     public void onDestroy();
 

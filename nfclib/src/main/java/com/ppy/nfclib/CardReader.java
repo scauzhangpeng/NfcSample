@@ -14,8 +14,8 @@ import java.io.IOException;
 import java.util.Arrays;
 
 /**
+ * NFC读卡器模式，基类。
  * Created by ZP on 2017/9/20.
- * NFC读卡器模式，基类
  */
 
 public class CardReader {
@@ -32,6 +32,7 @@ public class CardReader {
     public CardReader() {
 
     }
+
     public CardReader(Activity activity) {
         mActivity = activity;
         mDefaultAdapter = NfcAdapter.getDefaultAdapter(activity);
