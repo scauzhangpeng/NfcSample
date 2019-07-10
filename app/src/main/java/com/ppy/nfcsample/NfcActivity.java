@@ -78,7 +78,7 @@ public abstract class NfcActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         Log.d(TAG, "onStart: ");
-        mReaderManager.onStart(this);
+        mReaderManager.onStart();
     }
 
     @Override

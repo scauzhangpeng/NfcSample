@@ -65,7 +65,7 @@ public class NfcCardReaderManager implements INfcCardReader{
     }
 
     @Override
-    public void onStart(Activity activity) {
+    public void onStart() {
 
     }
 

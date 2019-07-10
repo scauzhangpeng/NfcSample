@@ -1,6 +1,5 @@
 package com.ppy.nfclib;
 
-import android.app.Activity;
 import android.content.Intent;
 
 import java.io.IOException;
@@ -14,7 +13,7 @@ public interface INfcCardReader {
 
     public void onCreate(Intent intent);
 
-    public void onStart(Activity activity);
+    public void onStart();
 
     public void onResume();
 
