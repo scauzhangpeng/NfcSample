@@ -1,11 +1,11 @@
 package com.ppy.nfclib;
 
+import android.content.Context;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.filters.LargeTest;
-import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Assert;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -16,24 +16,24 @@ import org.junit.runner.RunWith;
 @LargeTest
 public class NFCUtilTest {
 
-    @Rule
-    public ActivityTestRule<AndroidTestActivity> mActivityTestRule = new ActivityTestRule<AndroidTestActivity>(AndroidTestActivity.class);
-
     @Test
     public void isNfcExits() throws Exception {
-        boolean nfcExits = Util.isNfcExits(mActivityTestRule.getActivity());
+        Context context = InstrumentationRegistry.getTargetContext();
+        boolean nfcExits = Util.isNfcExits(context);
         Assert.assertTrue(nfcExits);
     }
 
     @Test
     public void isNfcEnable() throws Exception {
-        boolean nfcEnable = Util.isNfcEnable(mActivityTestRule.getActivity());
+        Context context = InstrumentationRegistry.getTargetContext();
+        boolean nfcEnable = Util.isNfcEnable(context);
         Assert.assertTrue(nfcEnable);
     }
 
     @Test
     public void isAndroidBeamEnable() throws Exception {
-        boolean androidBeamEnable = Util.isAndroidBeamEnable(mActivityTestRule.getActivity());
+        Context context = InstrumentationRegistry.getTargetContext();
+        boolean androidBeamEnable = Util.isAndroidBeamEnable(context);
         Assert.assertTrue(androidBeamEnable);
     }
 

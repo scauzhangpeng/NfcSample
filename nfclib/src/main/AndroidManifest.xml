@@ -3,10 +3,5 @@
           package="com.ppy.nfclib">
 
     <uses-permission android:name="android.permission.NFC"/>
-    <application
-        android:allowBackup="true"
-        android:supportsRtl="true">
-        <activity android:name=".AndroidTestActivity"/>
-    </application>
 
 </manifest>
