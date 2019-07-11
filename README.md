@@ -19,7 +19,7 @@ NFC库，兼容4.3之前API以及4.4之后的API，读卡器模式，Sample读�
 1.使用Gradle依赖 
 
 ```
-compile 'com.ppy:nfclib:1.0.2'
+implementation 'com.ppy:nfclib:1.0.2'
 ```
 
 2.初始化  
@@ -138,6 +138,7 @@ private void initNfcCardReader() {
 |mate 8|7.1.1|EMUI 5.0|
 |p20 pro|8.1.0|EMUI 8.1.0|
 |xiaomi note2|8.0|MIUI 10.0|
+|MEIZU 16s|9.0|Flyme 7.3.0.0A|
 |....希望大家一起测试完善|....|....|
 
 
