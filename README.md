@@ -19,7 +19,7 @@ NFC库，兼容4.3之前API以及4.4之后的API，读卡器模式，Sample读�
 1.使用Gradle依赖 
 
 ```
-implementation 'com.ppy:nfclib:1.0.2'
+implementation 'com.ppy:nfclib:1.0.3'
 ```
 
 2.初始化  
