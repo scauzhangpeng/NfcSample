@@ -13,7 +13,7 @@ import java.io.IOException
 import java.util.*
 
 /**
- * NFC读卡器模式，基类。
+ * NFC读卡器模式，基类.
  * Created by ZP on 2017/9/20.
  */
 

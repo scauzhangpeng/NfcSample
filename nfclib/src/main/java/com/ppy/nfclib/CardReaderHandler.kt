@@ -1,6 +1,7 @@
 package com.ppy.nfclib
 
 /**
+ * 监听回调接口.
  * Created by ZP on 2017/9/29.
  */
 

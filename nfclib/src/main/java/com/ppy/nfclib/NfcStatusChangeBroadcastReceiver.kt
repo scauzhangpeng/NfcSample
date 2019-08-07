@@ -7,6 +7,7 @@ import android.content.IntentFilter
 import android.nfc.NfcAdapter
 
 /**
+ * NFC开启、关闭系统广播.
  * Created by ZP on 2019/3/18.
  */
 open class NfcStatusChangeBroadcastReceiver : BroadcastReceiver() {
