@@ -70,7 +70,7 @@ public abstract class NfcActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate: ");
-        registerReceiver(mNfcStatusChangeBroadcastReceiver, NfcStatusChangeBroadcastReceiver.getNfcBroadcastReceiverIntentFilter());
+        registerReceiver(mNfcStatusChangeBroadcastReceiver, NfcStatusChangeBroadcastReceiver.Companion.getNfcBroadcastReceiverIntentFilter());
         initNfcCardReader();
         mReaderManager.onCreate(getIntent());
     }

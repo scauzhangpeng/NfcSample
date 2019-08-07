@@ -20,21 +20,21 @@ public class NFCUtilTest {
     @Test
     public void isNfcExits() throws Exception {
         Context context = InstrumentationRegistry.getTargetContext();
-        boolean nfcExits = Util.isNfcExits(context);
+        boolean nfcExits = Util.INSTANCE.isNfcExits(context);
         Assert.assertTrue(nfcExits);
     }
 
     @Test
     public void isNfcEnable() throws Exception {
         Context context = InstrumentationRegistry.getTargetContext();
-        boolean nfcEnable = Util.isNfcEnable(context);
+        boolean nfcEnable = Util.INSTANCE.isNfcEnable(context);
         Assert.assertTrue(nfcEnable);
     }
 
     @Test
     public void isAndroidBeamEnable() throws Exception {
         Context context = InstrumentationRegistry.getTargetContext();
-        boolean androidBeamEnable = Util.isAndroidBeamEnable(context);
+        boolean androidBeamEnable = Util.INSTANCE.isAndroidBeamEnable(context);
         Assert.assertTrue(androidBeamEnable);
     }
 

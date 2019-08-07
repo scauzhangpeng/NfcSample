@@ -54,7 +54,7 @@ public class SZTReader extends BaseReader implements IReader {
         }
         //read record
         cmds.clear();
-        for (int i = 0; i <= 10; i++) {
+        for (int i = 1; i <= 10; i++) {
             Iso7816 dir_srv_record = new Iso7816(Commands.readRecord(24, i), true);
             cmds.add(dir_srv_record);
         }

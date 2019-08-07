@@ -57,13 +57,13 @@ public class MainActivity extends NfcActivity {
     }
 
     private void initViews() {
-        mLlReadCard = (LinearLayout) findViewById(R.id.ll_read_card);
-        mLlShowCard = (LinearLayout) findViewById(R.id.ll_show_card);
+        mLlReadCard = findViewById(R.id.ll_read_card);
+        mLlShowCard = findViewById(R.id.ll_show_card);
 
-        mTvCardNumber = (TextView) findViewById(R.id.tv_card_number);
-        mTvCardBalance = (TextView) findViewById(R.id.tv_card_balance);
+        mTvCardNumber = findViewById(R.id.tv_card_number);
+        mTvCardBalance = findViewById(R.id.tv_card_balance);
 
-        mRvCardRecord = (RecyclerView) findViewById(R.id.rv_card_record);
+        mRvCardRecord = findViewById(R.id.rv_card_record);
         mRvCardRecord.setLayoutManager(new LinearLayoutManager(this));
         mRvCardRecord.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         mCardRecords = new ArrayList<>();
@@ -72,7 +72,7 @@ public class MainActivity extends NfcActivity {
             protected void bindData(BaseViewHolder holder, DefaultCardRecord cardRecord, int position) {
                 holder.setText(R.id.tv_record_type, String.valueOf(cardRecord.getTypeName()));
                 holder.setText(R.id.tv_record_date, DateUtil.str2str(cardRecord.getDate(), DateUtil.MMddHHmmss, DateUtil.MM_dd_HH_mm));
-                String price = Util.toAmountString(cardRecord.getPrice());
+                String price = Util.INSTANCE.toAmountString(cardRecord.getPrice());
                 if ("09".equals(cardRecord.getTypeCode())) {
                     holder.setText(R.id.tv_record_price, "-" + price);
                 } else {
@@ -104,7 +104,7 @@ public class MainActivity extends NfcActivity {
             @Override
             public void onClick(View v) {
                 dismissDialog();
-                Util.intentToNfcSetting(MainActivity.this);
+                Util.INSTANCE.intentToNfcSetting(MainActivity.this);
             }
         });
     }
@@ -128,7 +128,7 @@ public class MainActivity extends NfcActivity {
                 @Override
                 public void onClick(View v) {
                     dismissDialog();
-                    Util.intentToNfcSetting(MainActivity.this);
+                    Util.INSTANCE.intentToNfcSetting(MainActivity.this);
                 }
             });
         }
@@ -188,14 +188,14 @@ public class MainActivity extends NfcActivity {
                 mLlShowCard.setVisibility(View.VISIBLE);
                 if (cardInfo.getType() == 0) {
                     mTvCardNumber.setText("羊城通卡号:" + cardInfo.getCardNumber());
-                    mTvCardBalance.setText("余额：" + Util.toAmountString(cardInfo.getBalance()));
+                    mTvCardBalance.setText("余额：" + Util.INSTANCE.toAmountString(cardInfo.getBalance()));
                     mCardRecords.clear();
                     mCardRecords.addAll(cardInfo.getRecords());
                     mAdapter.notifyDataSetChanged();
                 }
                 if (cardInfo.getType() == 1) {
                     mTvCardNumber.setText("深圳通卡号:" + cardInfo.getCardNumber());
-                    mTvCardBalance.setText("余额：" + Util.toAmountString(cardInfo.getBalance()));
+                    mTvCardBalance.setText("余额：" + Util.INSTANCE.toAmountString(cardInfo.getBalance()));
                     mCardRecords.clear();
                     mCardRecords.addAll(cardInfo.getRecords());
                     mAdapter.notifyDataSetChanged();
@@ -209,12 +209,12 @@ public class MainActivity extends NfcActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = LayoutInflater.from(this);
         View view = inflater.inflate(R.layout.dialog_tag_lost, null);
-        TextView tvTitle = (TextView) view.findViewById(R.id.dialog_title);
-        TextView tvContent = (TextView) view.findViewById(R.id.dialog_content);
+        TextView tvTitle = view.findViewById(R.id.dialog_title);
+        TextView tvContent = view.findViewById(R.id.dialog_content);
         tvTitle.setText(title);
         tvContent.setText(content);
-        Button btnCancel = (Button) view.findViewById(R.id.btn_cancel);
-        Button btnOk = (Button) view.findViewById(R.id.btn_confirm);
+        Button btnCancel = view.findViewById(R.id.btn_cancel);
+        Button btnOk = view.findViewById(R.id.btn_confirm);
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

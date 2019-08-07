@@ -14,7 +14,7 @@ public class ShenZhenTong extends DefaultCardInfo {
      */
     public boolean parseCardInfo(byte[] src) {
         try {
-            int number = Util.hexToIntLittleEndian(src, 19, 4);
+            int number = Util.INSTANCE.hexToIntLittleEndian(src, 19, 4);
             cardNumber = String.valueOf(number);
             return true;
         } catch (Exception ex) {
@@ -30,7 +30,7 @@ public class ShenZhenTong extends DefaultCardInfo {
      */
     public boolean parseCardBalance(byte[] src) {
         try {
-            balance = Util.hexToInt(src, 1, src.length - 2 - 1);
+            balance = Util.INSTANCE.hexToInt(src, 1, src.length - 2 - 1);
             return true;
         } catch (Exception ex) {
             ex.printStackTrace();

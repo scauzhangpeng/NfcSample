@@ -32,7 +32,7 @@ public class NfcKikKatActivity extends AppCompatActivity {
         public void onTagDiscovered(Tag tag) {
             System.out.println(Arrays.toString(tag.getTechList()));
             System.out.println(tag.describeContents());
-            System.out.println(Util.ByteArrayToHexString(tag.getId()));
+            System.out.println(Util.INSTANCE.ByteArrayToHexString(tag.getId()));
             System.out.println(tag.toString());
         }
     };

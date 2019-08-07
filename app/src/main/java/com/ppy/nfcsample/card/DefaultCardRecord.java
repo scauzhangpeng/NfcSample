@@ -72,7 +72,7 @@ public class DefaultCardRecord {
     }
 
     public void readRecord(byte[] resp) throws Exception{
-        String record = Util.ByteArrayToHexString(resp);
+        String record = Util.INSTANCE.ByteArrayToHexString(resp);
         serialNumber = record.substring(0,4);
         price = Integer.parseInt(record.substring(10, 18), 16);
         typeCode = record.substring(18, 20);
