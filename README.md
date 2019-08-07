@@ -1,9 +1,7 @@
 # NfcSample
 NFC库，兼容4.3之前API以及4.4之后的API，读卡器模式，Sample读取羊城通卡号、余额、交易记录
 
-[ ![NFClib](https://img.shields.io/badge/NFClib-1.0.2-blue.svg) ](https://bintray.com/scauzhangpeng/NFCLib/nfclib/1.0.2/link)
-
->无意中从事C++开发的龙腿和我聊起适配，萌发了我想写各种各样的Android适配方面的东西，这个库算是一个开端，适配不同版本(4.4之前和之后)的NFC（读卡器模式）
+[ ![NFClib](https://img.shields.io/badge/NFClib-1.0.4-blue) ](https://bintray.com/scauzhangpeng/NFCLib/nfclib/1.0.2/link)
 
 本库将NFC的CardReader模式在API 4.3以及API 4.4之后不同的注册方式进行统一封装处理，使用本库不必考虑版本API差异，仅按照生命周期调用注册即可。
 
@@ -19,6 +17,10 @@ NFC库，兼容4.3之前API以及4.4之后的API，读卡器模式，Sample读�
 1.使用Gradle依赖 
 
 ```
+implementation 'com.ppy:nfclib:1.0.4'
+```
+```
+//java版本
 implementation 'com.ppy:nfclib:1.0.2'
 ```
 
@@ -131,22 +133,15 @@ private void initNfcCardReader() {
  
 |机型|版本|ROM版本|
 |----|---|-------|
-|索尼|4.3|~|
-|oppo|5.1|colorOs v3.0|
+|索尼XM50t|4.3|~|
+|oppo A35|5.1|colorOs v3.0|
 |锤子坚果pro|7.1.1|smartisan v3.5.2|
-|nexus 6|5.0/5.1.1/6.0.1/7.1.1|~|
-|mate 8|7.1.1|EMUI 5.0|
-|p20 pro|8.1.0|EMUI 8.1.0|
-|xiaomi note2|8.0|MIUI 10.0|
-|MEIZU 16s|9.0|Flyme 7.3.0.0A|
+|谷歌Nexus 6|5.0/5.1.1/6.0.1/7.1.1|~|
+|华为Mate 8|7.1.1|EMUI 5.0|
+|华为p20 pro|8.1.0|EMUI 8.1.0|
+|小米note2|8.0|MIUI 10.0|
+|魅族16s|9.0|Flyme 7.3.0.0A|
 |....希望大家一起测试完善|....|....|
-
-
-## TODO
-
-1.考虑解决重读问题
-
-2.完善本库，增加卡模拟相关API
 
 ## 感谢
 1.潘工  
