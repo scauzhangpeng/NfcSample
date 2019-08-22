@@ -8,7 +8,6 @@ import android.nfc.tech.IsoDep
 import android.os.Build
 import android.os.Handler
 import android.os.HandlerThread
-import android.util.Log
 import java.io.IOException
 import java.util.*
 
@@ -34,33 +33,31 @@ open class CardReader(activity: Activity) {
     }
 
     open fun enableCardReader() {
-        Log.d(TAG, "enableCardReader: ")
+        Logger.get().println(TAG, "enableCardReader: ")
         if (mActivity == null) {
             throw RuntimeException("please init first...")
         }
-        mActivity?.let {
+        mActivity?.let { it ->
             if (!Util.isNfcExits(it)) {
-                if (mCardReaderHandler != null) {
-                    mCardReaderHandler!!.onNfcNotExit()
+                mCardReaderHandler?.let {
+                    it.onNfcNotExit()
                     return
                 }
             }
 
             if (!Util.isNfcEnable(it)) {
-                if (mCardReaderHandler != null) {
-                    mCardReaderHandler!!.onNfcNotEnable()
-                }
+                mCardReaderHandler?.onNfcNotEnable()
             }
         }
     }
 
     open fun disableCardReader() {
-        Log.d(TAG, "disableCardReader: ")
+        Logger.get().println(TAG, "disableCardReader: ")
     }
 
     @Synchronized
     open fun dispatchTag(tag: Tag) {
-        Log.d(TAG, "dispatchTag: " + Arrays.toString(tag.techList))
+        Logger.get().println(TAG, "dispatchTag: " + Arrays.toString(tag.techList))
         if (Arrays.toString(tag.techList).contains(IsoDep::class.java.name)) {
             connectCard(tag)
         }
@@ -69,7 +66,7 @@ open class CardReader(activity: Activity) {
     @Synchronized
     private fun connectCard(tag: Tag) {
         mIsoDep?.let {
-            Log.d(TAG, "connectCard: card connecting")
+            Logger.get().println(TAG, "connectCard(): card connecting")
             return
         }
 
@@ -80,7 +77,7 @@ open class CardReader(activity: Activity) {
                 it.connect()
                 doOnCardConnected(true)
             } catch (e: IOException) {
-                Log.d(TAG, "connectCard exception = " + e.message)
+                Logger.get().println(TAG, "connectCard exception = " + e.message, e)
                 e.printStackTrace()
                 doOnCardConnected(false)
             }

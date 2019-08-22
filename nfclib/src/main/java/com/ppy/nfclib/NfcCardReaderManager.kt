@@ -4,8 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.nfc.NfcAdapter
 import android.nfc.Tag
-import android.util.Log
-
 import java.io.IOException
 
 /**
@@ -20,6 +18,7 @@ class NfcCardReaderManager private constructor(builder: Builder) : INfcCardReade
     private var enableSound = true
     private val mDelay: Int = 0
     private var mCardOperatorListener: CardOperatorListener? = null
+    private var printer: Printer? = null
 
     private val mHandler = object : CardReaderHandler {
         override fun onNfcNotExit() {
@@ -42,6 +41,7 @@ class NfcCardReaderManager private constructor(builder: Builder) : INfcCardReade
     }
 
     init {
+        Logger.get().setUserPrinter(builder.printer)
         mActivity = builder.mActivity
         mCardReader = builder.mCardReader
         if (builder.mCardReader == null) {
@@ -94,7 +94,7 @@ class NfcCardReaderManager private constructor(builder: Builder) : INfcCardReade
             if (tag != null) {
                 mCardReader?.dispatchTag(tag)
             } else {
-                Log.d("NfcCardReaderManager", "dispatchIntent: tag is null")
+                Logger.get().println("NfcCardReaderManager", "dispatchIntent: tag is null")
             }
         }
     }
@@ -133,6 +133,7 @@ class NfcCardReaderManager private constructor(builder: Builder) : INfcCardReade
         var mCardReader: CardReader? = null
         var enableSound: Boolean = false
         var mDelay: Int = 0
+        var printer: Printer? = null
 
         constructor(activity: Activity) {
             mActivity = activity
@@ -143,6 +144,7 @@ class NfcCardReaderManager private constructor(builder: Builder) : INfcCardReade
             this.mCardReader = copy.mCardReader
             this.enableSound = copy.enableSound
             this.mDelay = copy.mDelay
+            this.printer = copy.printer
         }
 
         fun mCardReader(value: CardReader): Builder {
@@ -161,6 +163,11 @@ class NfcCardReaderManager private constructor(builder: Builder) : INfcCardReade
                 delay = 0
             }
             mDelay = delay
+            return this
+        }
+
+        fun setPrinter(value: Printer): Builder {
+            printer = value
             return this
         }
 
