@@ -34,7 +34,7 @@ class DefaultCardRecord {
 
     @Throws(Exception::class)
     fun readRecord(resp: ByteArray) {
-        val record = Util.ByteArrayToHexString(resp)
+        val record = Util.byteArrayToHexString(resp)
         serialNumber = record.substring(0, 4)
         price = Integer.parseInt(record.substring(10, 18), 16).toLong()
         typeCode = record.substring(18, 20)

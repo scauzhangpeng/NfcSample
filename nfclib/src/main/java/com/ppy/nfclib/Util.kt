@@ -20,7 +20,7 @@ object Util {
      * @param bytes Bytes to convert
      * @return String, containing hexadecimal representation.
      */
-    fun ByteArrayToHexString(bytes: ByteArray): String {
+    fun byteArrayToHexString(bytes: ByteArray): String {
         val hexArray = charArrayOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F')
         val hexChars = CharArray(bytes.size * 2)
         var v: Int
@@ -41,7 +41,7 @@ object Util {
      * @param s String containing hexadecimal characters to convert
      * @return Byte array generated from input
      */
-    fun HexStringToByteArray(s: String): ByteArray {
+    fun hexStringToByteArray(s: String): ByteArray {
         val len = s.length
         val data = ByteArray(len / 2)
         var i = 0
@@ -132,7 +132,7 @@ object Util {
     }
 
     /**
-     * 判断手机NFC的Android Beam是否开启，在API 16之后才有.
+     * 判断手机NFC的Android Beam是否开启，在API 16之后才有，在API 29被废除.
      *
      * @param context [Context]
      * @return `true`: 已开启 `false`: 未开启
@@ -149,7 +149,7 @@ object Util {
      * @return `true`:具备 `false`:不具备
      */
     fun isAndroidBeamExits(context: Context): Boolean {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && isNfcExits(context)
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q && isNfcExits(context)
     }
 
     /**
@@ -160,7 +160,7 @@ object Util {
      */
     fun intentToNfcSetting(context: Context): Boolean {
         if (isNfcExits(context)) {
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 return toIntent(context, Settings.ACTION_NFC_SETTINGS)
             }
         }

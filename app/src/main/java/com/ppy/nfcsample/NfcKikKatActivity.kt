@@ -20,7 +20,7 @@ class NfcKikKatActivity : AppCompatActivity() {
     private val mReaderCallback = NfcAdapter.ReaderCallback { tag ->
         println(Arrays.toString(tag.techList))
         println(tag.describeContents())
-        println(Util.ByteArrayToHexString(tag.id))
+        println(Util.byteArrayToHexString(tag.id))
         println(tag.toString())
     }
 

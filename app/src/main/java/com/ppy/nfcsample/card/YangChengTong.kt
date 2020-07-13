@@ -14,7 +14,7 @@ class YangChengTong : DefaultCardInfo() {
      */
     fun parseCardInfo(resp: ByteArray): Boolean {
         try {
-            val src = Util.ByteArrayToHexString(resp)
+            val src = Util.byteArrayToHexString(resp)
             cardNumber = src.substring(22, 32)
             effectiveDate = src.substring(46, 54)
             expiredDate = src.substring(54, 62)

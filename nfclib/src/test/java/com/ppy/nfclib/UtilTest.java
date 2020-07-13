@@ -38,7 +38,7 @@ public class UtilTest {
     @Test
     public void byteArrayToHexString() throws Exception {
         final byte[] input = {(byte) 0xc0, (byte) 0xff, (byte) 0xee};
-        final String output = Util.INSTANCE.ByteArrayToHexString(input);
+        final String output = Util.INSTANCE.byteArrayToHexString(input);
         assertEquals("C0FFEE", output);
     }
 
@@ -48,7 +48,7 @@ public class UtilTest {
     @Test
     public void hexStringToByteArray() throws Exception {
         final byte[] testData = {(byte) 0xc0, (byte) 0xff, (byte) 0xee};
-        final byte[] output = Util.INSTANCE.HexStringToByteArray("C0FFEE");
+        final byte[] output = Util.INSTANCE.hexStringToByteArray("C0FFEE");
         for (int i = 0; i < testData.length; i++) {
             assertEquals(testData[i], output[i]);
         }

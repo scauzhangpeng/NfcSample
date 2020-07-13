@@ -89,8 +89,8 @@ class NfcCardReaderManager private constructor(builder: Builder) : INfcCardReade
     }
 
     private fun dispatchIntent(intent: Intent?) {
-        if (intent != null) {
-            val tag = intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)
+        intent?.let {
+            val tag = it.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)
             if (tag != null) {
                 mCardReader?.dispatchTag(tag)
             } else {
@@ -102,14 +102,14 @@ class NfcCardReaderManager private constructor(builder: Builder) : INfcCardReade
     @Throws(IOException::class)
     override fun sendData(data: ByteArray): String {
         mCardReader?.let {
-            return Util.ByteArrayToHexString(it.transceive(data))
+            return Util.byteArrayToHexString(it.transceive(data))
         } ?: throw IOException("Card Reader is null")
 
     }
 
     @Throws(IOException::class)
     override fun sendData(hexData: String): String {
-        return sendData(Util.HexStringToByteArray(hexData))
+        return sendData(Util.hexStringToByteArray(hexData))
     }
 
     @Throws(IOException::class)
@@ -121,7 +121,7 @@ class NfcCardReaderManager private constructor(builder: Builder) : INfcCardReade
 
     @Throws(IOException::class)
     override fun tranceive(hexData: String): ByteArray {
-        return tranceive(Util.HexStringToByteArray(hexData))
+        return tranceive(Util.hexStringToByteArray(hexData))
     }
 
     fun setOnCardOperatorListener(listener: CardOperatorListener) {
