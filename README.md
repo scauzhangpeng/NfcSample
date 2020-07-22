@@ -10,9 +10,9 @@ NFC库，兼容4.3之前API以及4.4之后的API，读卡器模式，Sample读�
 ## 截图
 |sony xm50t(4.3)|oppo A37m(5.1)|锤子 坚果pro(7.1.1)|
 |---------------|--------------|------------------|
-|<img src="https://github.com/scauzhangpeng/NfcSample/blob/master/screenshot/sony_xm50t(4.3).jpg" width="300"/>|<img src="https://github.com/scauzhangpeng/NfcSample/blob/master/screenshot/oppo_A37m(5.1).jpg" width="300"/>|<img src="https://github.com/scauzhangpeng/NfcSample/blob/master/screenshot/smartisan_pro(7.1.1).jpg" width="300"/>|
+|<img src="https://s1.ax1x.com/2020/07/22/UHMZ6K.jpg" width="300"/>|<img src="https://s1.ax1x.com/2020/07/22/UHMFYR.png" width="300"/>|<img src="https://s1.ax1x.com/2020/07/22/UHMVl6.png" width="300"/>|
 |nexus 6(5.0)|mate8 QQ-卡号|mate8 QQ-记录|
-|<img src="https://github.com/scauzhangpeng/NfcSample/blob/master/screenshot/nexus_6(5.0).jpg" width="300"/>|<img src="https://github.com/scauzhangpeng/NfcSample/blob/master/screenshot/mate8_QQ-card_number.jpg" width="300"/>|<img src="https://github.com/scauzhangpeng/NfcSample/blob/master/screenshot/mate8_QQ-record.jpg" width="300"/>|
+|<img src="https://s1.ax1x.com/2020/07/22/UHM9w4.png" width="300"/>|<img src="https://s1.ax1x.com/2020/07/22/UHMeOO.png" width="300"/>|<img src="https://s1.ax1x.com/2020/07/22/UHMik9.png" width="300"/>|
 ## 如何使用本库
 1.使用Gradle依赖 
 
@@ -127,7 +127,7 @@ private void initNfcCardReader() {
  
  - OPPO A37m机型需要同时开启NFC以及Android Beam，论坛也有人反馈，但是目前本人测试后并不需要，但是QQ读卡需要同时开启，目前不清楚。
  (版本号：A37m_11_A.23_171025,内核版本：3.10.72-G201710251842,基带版本：MOLY.LR11.W1539.MD.TC16.JAD.SP.V1.P31.T47,2017/10/13 16:19)
- <img src = "https://github.com/scauzhangpeng/NfcSample/blob/master/screenshot/oppo-bug.jpg" width = "900"/>
+ <img src = "https://s1.ax1x.com/2020/07/22/UHMkf1.png" width = "900"/>
  
  - 已测试机型如下表：
  
@@ -160,4 +160,4 @@ Email：scau_zhangpeng@163.com
 
 |微信|QQ|
 |----|----|
-|<img src = "https://github.com/scauzhangpeng/NfcSample/blob/master/screenshot/mmqrcode1542869847836.png" width = "200"/>|<img src = "https://github.com/scauzhangpeng/NfcSample/blob/master/screenshot/IMG_20181122_150644.jpg" width = "200"/>|
+|<img src = "https://s1.ax1x.com/2020/07/22/UHMCTJ.jpg" width = "200"/>|<img src = "https://s1.ax1x.com/2020/07/22/UHMESx.jpg" width = "200"/>|
