@@ -20,11 +20,11 @@ class YCTReader : BaseReader(), IReader {
         val cardInfo = YangChengTong()
         cardInfo.type = type
 
-        val dir_pse = Iso7816(Commands.selectByName(*Commands.DFN_PSE))
+//        val dir_pse = Iso7816(Commands.selectByName(*Commands.DFN_PSE))
         val dir_srv = Iso7816(Commands.selectByName(*Commands.DFN_SRV))
         val dir_srv_info = Iso7816(Commands.readBinary(21))
         val dir_srv_s2 = Iso7816(Commands.selectByName(*Commands.DFN_SRV_S2))
-        val dir_srv_s1 = Iso7816(Commands.selectByName(*Commands.DFN_SRV_S1))
+//        val dir_srv_s1 = Iso7816(Commands.selectByName(*Commands.DFN_SRV_S1))
         val balance = Iso7816(Commands.getBalance(true))
         val cmds: MutableList<Iso7816> = mutableListOf()
         cmds.add(dir_srv)

@@ -213,8 +213,8 @@ class MainActivity : NfcActivity() {
                 ?: return
 
         val arr = arrayOf("mCurRootView", "mServedView", "mNextServedView", "mLastSrvView")
-        var f: Field? = null
-        var obj_get: Any? = null
+        var f: Field?
+        var obj_get: Any?
         for (i in arr.indices) {
             val param = arr[i]
             try {

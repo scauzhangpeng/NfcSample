@@ -22,7 +22,7 @@ object DateUtil {
         val srcSdf = SimpleDateFormat(format, Locale.CHINA)
         val targetSdf = SimpleDateFormat(targetFormat, Locale.CHINA)
         try {
-            targetStr = targetSdf.format(srcSdf.parse(src).time)
+            targetStr = targetSdf.format(srcSdf.parse(src)?.time)
         } catch (e: ParseException) {
             e.printStackTrace()
         }

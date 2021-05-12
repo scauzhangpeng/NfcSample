@@ -158,11 +158,7 @@ class NfcCardReaderManager private constructor(builder: Builder) : INfcCardReade
         }
 
         fun setReaderPresenceCheckDelay(delay: Int): Builder {
-            var delay = delay
-            if (delay < 0) {
-                delay = 0
-            }
-            mDelay = delay
+            mDelay = if (delay < 0) 0 else delay
             return this
         }
 
