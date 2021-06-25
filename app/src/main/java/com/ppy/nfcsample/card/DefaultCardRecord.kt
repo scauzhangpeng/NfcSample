@@ -1,6 +1,6 @@
 package com.ppy.nfcsample.card
 
-import com.ppy.nfclib.Util
+import com.ppy.nfclib.util.Util
 
 /**
  * Created by ZP on 2017/9/21.

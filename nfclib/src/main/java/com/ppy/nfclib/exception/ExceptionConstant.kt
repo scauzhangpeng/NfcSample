@@ -1,4 +1,4 @@
-package com.ppy.nfclib
+package com.ppy.nfclib.exception
 
 import android.util.SparseArray
 
@@ -18,6 +18,11 @@ object ExceptionConstant {
      * 手机NFC未开启.
      */
     const val NFC_NOT_ENABLE = 1
+
+    /**
+     * 连接卡片失败.
+     */
+    const val CONNECT_TAG_FAIL = 2
 
     init {
         mNFCException.put(NFC_NOT_EXIT, "do not support nfc")

@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import com.ppy.nfclib.Util
+import com.ppy.nfclib.util.Util
 import java.util.*
 
 /**

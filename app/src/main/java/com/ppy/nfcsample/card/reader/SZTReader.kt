@@ -1,7 +1,7 @@
 package com.ppy.nfcsample.card.reader
 
 import android.util.Log
-import com.ppy.nfclib.NfcCardReaderManager
+import com.ppy.nfclib.NfcManagerCompat
 import com.ppy.nfcsample.card.*
 import java.io.IOException
 import java.util.*
@@ -16,7 +16,7 @@ class SZTReader : BaseReader(), IReader {
         get() = 1
 
     @Throws(IOException::class)
-    override fun readCard(nfcCardReaderManager: NfcCardReaderManager): DefaultCardInfo? {
+    override fun readCard(nfcCardReaderManager: NfcManagerCompat): DefaultCardInfo? {
         Log.d(TAG, "readCard: ")
         val cardInfo = ShenZhenTong()
         cardInfo.type = type

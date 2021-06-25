@@ -1,11 +1,14 @@
-package com.ppy.nfclib
+package com.ppy.nfclib.util
 
 import android.content.Context
 import android.content.Intent
 import android.nfc.NfcAdapter
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import java.util.*
+import java.util.concurrent.Executor
 
 /**
  * NFC相关工具类.
@@ -199,5 +202,11 @@ object Util {
         return true
     }
 
+    internal class MainThreadExecutor : Executor {
+        private val handler = Handler(Looper.getMainLooper())
+        override fun execute(r: Runnable) {
+            handler.post(r)
+        }
+    }
 
 }

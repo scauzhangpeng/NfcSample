@@ -1,6 +1,6 @@
 package com.ppy.nfcsample.card.reader
 
-import com.ppy.nfclib.NfcCardReaderManager
+import com.ppy.nfclib.NfcManagerCompat
 import com.ppy.nfcsample.card.DefaultCardInfo
 
 import java.io.IOException
@@ -12,7 +12,7 @@ import java.io.IOException
 class CardReaderChain(private val mReaders: List<IReader>) : IReader.Chain {
 
     @Throws(IOException::class)
-    override fun proceed(nfcCardReaderManager: NfcCardReaderManager): DefaultCardInfo? {
+    override fun proceed(nfcCardReaderManager: NfcManagerCompat): DefaultCardInfo? {
         var defaultCardInfo: DefaultCardInfo? = null
         for (reader in mReaders) {
             defaultCardInfo = reader.readCard(nfcCardReaderManager)

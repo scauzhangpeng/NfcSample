@@ -6,7 +6,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 
 import com.ppy.nfclib.CardOperatorListener
-import com.ppy.nfclib.NfcCardReaderManager
+import com.ppy.nfclib.NfcManagerCompat
 import com.ppy.nfclib.NfcStatusChangeBroadcastReceiver
 
 /**
@@ -16,7 +16,7 @@ abstract class NfcActivity : AppCompatActivity() {
 
     private val TAG = this.javaClass.simpleName
 
-    protected lateinit var mReaderManager: NfcCardReaderManager
+    protected lateinit var mReaderManager: NfcManagerCompat
 
     private val mCardOperatorListener = object : CardOperatorListener {
         override fun onCardConnected(isConnected: Boolean) {
@@ -40,16 +40,19 @@ abstract class NfcActivity : AppCompatActivity() {
             super.onNfcOff()
             doOnNfcOff()
         }
+
+        override fun onCardPayMode() {
+            super.onCardPayMode()
+            doOnNfcOff()
+        }
     }
 
 
     private fun initNfcCardReader() {
-        mReaderManager = NfcCardReaderManager.Builder(this)
-                .enableSound(false)
-                .setPrinter(LoggerImpl())
-                //.setReaderPresenceCheckDelay(30000)
-                .build()
-        mReaderManager.setOnCardOperatorListener(mCardOperatorListener)
+        mReaderManager = NfcManagerCompat(activity = this,
+            cardOperatorListener = mCardOperatorListener,
+            printer = LoggerImpl(),
+            enableSound = false)
     }
 
     abstract fun doOnCardConnected(isConnected: Boolean)
@@ -89,6 +92,7 @@ abstract class NfcActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         Log.d(TAG, "onStop: ")
+        mReaderManager.onStop()
     }
 
     override fun onDestroy() {

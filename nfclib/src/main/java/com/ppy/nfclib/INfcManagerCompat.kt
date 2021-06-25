@@ -1,27 +1,31 @@
 package com.ppy.nfclib
 
 import android.content.Intent
-
+import com.ppy.nfclib.util.Util
 import java.io.IOException
 
 /**
- * NFC调用相关接口.
- * Created by ZP on 2017/9/20.
+ * Nfc管理类，提供一系列外部调用接口.
  */
-
-interface INfcCardReader {
-
+interface INfcManagerCompat {
+    /**
+     * 卡片是否已连接.
+     */
     fun isCardConnect(): Boolean
 
     fun onCreate(intent: Intent)
 
-    fun onStart()
+    fun onStart() {
+
+    }
 
     fun onResume()
 
     fun onPause()
 
-    fun onStop()
+    fun onStop() {
+
+    }
 
     fun onDestroy()
 
@@ -31,12 +35,15 @@ interface INfcCardReader {
     fun sendData(data: ByteArray): String
 
     @Throws(IOException::class)
-    fun sendData(hexData: String): String
+    fun sendData(hexData: String): String {
+        return sendData(Util.hexStringToByteArray(hexData))
+    }
 
     @Throws(IOException::class)
     fun tranceive(data: ByteArray): ByteArray
 
     @Throws(IOException::class)
-    fun tranceive(hexData: String): ByteArray
-
+    fun tranceive(hexData: String): ByteArray {
+        return tranceive(Util.hexStringToByteArray(hexData))
+    }
 }

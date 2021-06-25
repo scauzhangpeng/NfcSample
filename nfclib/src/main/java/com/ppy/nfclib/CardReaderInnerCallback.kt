@@ -1,11 +1,13 @@
 package com.ppy.nfclib
 
+import java.lang.Exception
+
 /**
  * 监听回调接口.
  * Created by ZP on 2017/9/29.
  */
 
-interface CardReaderHandler {
+interface CardReaderInnerCallback {
 
     /**
      * 手机不支持NFC.
@@ -23,5 +25,7 @@ interface CardReaderHandler {
      * @param isConnected true 已连接 false 未连接
      */
     fun onCardConnected(isConnected: Boolean)
+
+    fun onException(exception: Exception)
 
 }

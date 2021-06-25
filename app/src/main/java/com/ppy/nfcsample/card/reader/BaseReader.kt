@@ -1,6 +1,6 @@
 package com.ppy.nfcsample.card.reader
 
-import com.ppy.nfclib.NfcCardReaderManager
+import com.ppy.nfclib.NfcManagerCompat
 import com.ppy.nfcsample.card.Commands
 import com.ppy.nfcsample.card.Iso7816
 import java.io.IOException
@@ -29,7 +29,7 @@ open class BaseReader {
     }
 
     @Throws(IOException::class)
-    protected fun executeCommands(mReader: NfcCardReaderManager, commands: MutableList<Iso7816>): MutableList<Iso7816>? {
+    protected fun executeCommands(mReader: NfcManagerCompat, commands: MutableList<Iso7816>): MutableList<Iso7816>? {
         val resp = ArrayList<Iso7816>()
         for (command in commands) {
             val iso7816 = executeSingleCommand(mReader, command) ?: return null
@@ -39,7 +39,7 @@ open class BaseReader {
     }
 
     @Throws(IOException::class)
-    protected fun executeSingleCommand(mReader: NfcCardReaderManager, command: Iso7816): Iso7816? {
+    protected fun executeSingleCommand(mReader: NfcManagerCompat, command: Iso7816): Iso7816? {
         val cmd = command.cmd
         print("指令:" + Commands.ByteArrayToHexString(cmd))
         val resp = mReader.tranceive(cmd)

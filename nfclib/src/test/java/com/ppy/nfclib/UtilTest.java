@@ -1,5 +1,7 @@
 package com.ppy.nfclib;
 
+import com.ppy.nfclib.util.Util;
+
 import org.junit.Assert;
 import org.junit.Test;
 

@@ -1,6 +1,6 @@
 package com.ppy.nfcsample.card.reader
 
-import com.ppy.nfclib.NfcCardReaderManager
+import com.ppy.nfclib.NfcManagerCompat
 import com.ppy.nfcsample.card.DefaultCardInfo
 import java.io.IOException
 import java.util.*
@@ -13,7 +13,7 @@ class CardClient private constructor(builder: Builder) {
 
     private val readers: List<IReader>
     private val chain: IReader.Chain
-    private var mNfcCardReaderManager: NfcCardReaderManager
+    private var mNfcCardReaderManager: NfcManagerCompat
 
 
     init {
@@ -30,7 +30,7 @@ class CardClient private constructor(builder: Builder) {
 
     class Builder {
         val readers = ArrayList<IReader>()
-        lateinit var mNfcCardReaderManager: NfcCardReaderManager
+        lateinit var mNfcCardReaderManager: NfcManagerCompat
 
         constructor() {}
 
@@ -44,7 +44,7 @@ class CardClient private constructor(builder: Builder) {
             return this
         }
 
-        fun nfcManager(manager: NfcCardReaderManager): Builder {
+        fun nfcManager(manager: NfcManagerCompat): Builder {
             mNfcCardReaderManager = manager
             return this
         }

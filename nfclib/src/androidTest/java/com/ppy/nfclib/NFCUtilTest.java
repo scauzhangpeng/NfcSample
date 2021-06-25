@@ -6,6 +6,8 @@ import androidx.test.InstrumentationRegistry;
 import androidx.test.filters.LargeTest;
 import androidx.test.runner.AndroidJUnit4;
 
+import com.ppy.nfclib.util.Util;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

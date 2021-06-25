@@ -40,7 +40,7 @@ class NfcJellyBeanActivity : AppCompatActivity() {
         Log.d(TAG, "onNewIntent: ")
         if (intent != null) {
             val tag = intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)
-            println(Arrays.toString(tag.techList))
+            println(Arrays.toString(tag?.techList))
         } else {
             println("intent null")
         }

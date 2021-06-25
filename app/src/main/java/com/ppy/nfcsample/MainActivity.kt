@@ -3,7 +3,6 @@ package com.ppy.nfcsample
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -14,8 +13,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.ppy.nfclib.ExceptionConstant
-import com.ppy.nfclib.Util
+import com.ppy.nfclib.exception.ExceptionConstant
+import com.ppy.nfclib.util.Util
 import com.ppy.nfcsample.adapter.BaseAdapter
 import com.ppy.nfcsample.adapter.BaseViewHolder
 import com.ppy.nfcsample.card.DefaultCardInfo
@@ -42,7 +41,6 @@ class MainActivity : NfcActivity() {
     private lateinit var mCardClient: CardClient
     private var mDialog: Dialog? = null
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.d(TAG, "onCreate: ")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initViews()
@@ -90,10 +88,10 @@ class MainActivity : NfcActivity() {
     }
 
     override fun doOnNfcOff() {
-        showDialog("接收到系统广播", "Nfc已经关闭，前往打开？", View.OnClickListener {
+        showDialog("接收到系统广播", "Nfc已经关闭，前往打开？") {
             dismissDialog()
             Util.intentToNfcSetting(this@MainActivity)
-        })
+        }
     }
 
     override fun doOnNfcOn() {
@@ -108,14 +106,20 @@ class MainActivity : NfcActivity() {
 
     override fun doOnException(code: Int, message: String) {
         if (code == ExceptionConstant.NFC_NOT_ENABLE) {
-            showDialog("NFC设备", "NFC未打开，前往打开？", View.OnClickListener {
+            showDialog("NFC设备", "NFC未打开，前往打开？") {
                 dismissDialog()
                 Util.intentToNfcSetting(this@MainActivity)
-            })
+            }
         }
 
         if (code == ExceptionConstant.NFC_NOT_EXIT) {
-            showDialog("NFC设备", "设备不支持NFC", View.OnClickListener { dismissDialog() })
+            showDialog("NFC设备", "设备不支持NFC") { dismissDialog() }
+        }
+
+        if (code == ExceptionConstant.CONNECT_TAG_FAIL) {
+            showDialog("读卡失败", "请重新贴紧卡片") {
+                dismissDialog()
+            }
         }
     }
 
@@ -127,11 +131,11 @@ class MainActivity : NfcActivity() {
         } catch (e: IOException) {
             e.printStackTrace()
             runOnUiThread {
-                showDialog("读卡失败", "请重新贴紧卡片", View.OnClickListener {
+                showDialog("读卡失败", "请重新贴紧卡片") {
                     dismissDialog()
                     mLlShowCard.visibility = View.GONE
                     mLlReadCard.visibility = View.VISIBLE
-                })
+                }
             }
             return
         }
@@ -163,11 +167,11 @@ class MainActivity : NfcActivity() {
     }
 
     private fun doOnReadCardError() {
-        showDialog("读卡失败", "暂不支持此类卡片", View.OnClickListener {
+        showDialog("读卡失败", "暂不支持此类卡片") {
             dismissDialog()
             mLlShowCard.visibility = View.GONE
             mLlReadCard.visibility = View.VISIBLE
-        })
+        }
     }
 
     private fun showDialog(title: String, content: String, listener: View.OnClickListener) {
@@ -213,8 +217,8 @@ class MainActivity : NfcActivity() {
                 ?: return
 
         val arr = arrayOf("mCurRootView", "mServedView", "mNextServedView", "mLastSrvView")
-        var f: Field? = null
-        var obj_get: Any? = null
+        var f: Field?
+        var obj_get: Any?
         for (i in arr.indices) {
             val param = arr[i]
             try {

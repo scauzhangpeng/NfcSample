@@ -1,39 +1,42 @@
-package com.ppy.nfclib
+package com.ppy.nfclib.reader
 
 import android.annotation.TargetApi
 import android.app.Activity
 import android.nfc.NfcAdapter
-import android.nfc.Tag
 import android.os.Build
 import android.os.Bundle
+import com.ppy.nfclib.CardReaderInnerCallback
 
 /**
  * API 大于等于 19 NFC读卡器模式.
  * Created by ZP on 2017/9/20.
  */
 @TargetApi(Build.VERSION_CODES.KITKAT)
-class KikKatCardReader(activity: Activity) : CardReader(activity) {
+class KikKatCardReader(
+    override val activity: Activity,
+    override val mCardReaderInnerCallback: CardReaderInnerCallback?
+) : BaseCardReader(activity, mCardReaderInnerCallback) {
 
-    private val mReaderCallback = NfcAdapter.ReaderCallback { tag -> dispatchTag(tag) }
+    private val mReaderCallback by lazy {
+        NfcAdapter.ReaderCallback { tag -> dispatchTag(tag) }
+    }
 
-    private var extra: Bundle? = null
+    private val extra: Bundle by lazy {
+        Bundle()
+    }
 
     override fun enableCardReader() {
-        super.enableCardReader()
-        if (extra != null && extra!!.getInt(NfcAdapter.EXTRA_READER_PRESENCE_CHECK_DELAY) > 0) {
-            mDefaultAdapter?.enableReaderMode(mActivity, mReaderCallback, READER_FLAG, extra)
+        val delay = extra.getInt(NfcAdapter.EXTRA_READER_PRESENCE_CHECK_DELAY, -1)
+        if (delay > 0) {
+            mDefaultNfcAdapter?.enableReaderMode(activity, mReaderCallback, READER_FLAG, extra)
         } else {
-            mDefaultAdapter?.enableReaderMode(mActivity, mReaderCallback, READER_FLAG, null)
+            mDefaultNfcAdapter?.enableReaderMode(activity, mReaderCallback, READER_FLAG, null)
         }
     }
 
     override fun disableCardReader() {
         super.disableCardReader()
-        mDefaultAdapter?.disableReaderMode(mActivity)
-    }
-
-    override fun dispatchTag(tag: Tag) {
-        super.dispatchTag(tag)
+        mDefaultNfcAdapter?.disableReaderMode(activity)
     }
 
     override fun enablePlatformSound(enableSound: Boolean) {
@@ -43,10 +46,7 @@ class KikKatCardReader(activity: Activity) : CardReader(activity) {
     }
 
     override fun setReaderPresenceCheckDelay(delay: Int) {
-        if (extra == null) {
-            extra = Bundle()
-        }
-        extra?.putInt(NfcAdapter.EXTRA_READER_PRESENCE_CHECK_DELAY, delay)
+        extra.putInt(NfcAdapter.EXTRA_READER_PRESENCE_CHECK_DELAY, delay)
     }
 
     companion object {

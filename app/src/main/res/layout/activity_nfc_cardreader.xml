@@ -9,7 +9,7 @@
         android:onClick="openReadCityCardActivity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/holo_blue_light"
+        android:background="@color/bgCardInfo"
         android:textColor="@android:color/white"
         android:text="读取城市一卡通"/>
 
