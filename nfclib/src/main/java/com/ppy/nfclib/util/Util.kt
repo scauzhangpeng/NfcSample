@@ -142,7 +142,7 @@ object Util {
      */
     fun isAndroidBeamEnable(context: Context): Boolean {
         val nfcAdapter = NfcAdapter.getDefaultAdapter(context)
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && nfcAdapter != null && nfcAdapter.isNdefPushEnabled
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q && nfcAdapter != null && nfcAdapter.isNdefPushEnabled
     }
 
     /**
