@@ -26,7 +26,6 @@ class NfcKikKatActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
     }
 
     override fun onResume() {
@@ -66,7 +65,7 @@ class NfcKikKatActivity : AppCompatActivity() {
 
     companion object {
 
-        private val TAG = "NfcKikKatActivity"
+        private const val TAG = "NfcKikKatActivity"
         private const val READER_FLAGS = (NfcAdapter.FLAG_READER_NFC_A
                 or NfcAdapter.FLAG_READER_SKIP_NDEF_CHECK or NfcAdapter.FLAG_READER_NO_PLATFORM_SOUNDS)
     }

@@ -7,70 +7,36 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
-import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AlertDialog
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import com.ppy.nfclib.exception.ExceptionConstant
 import com.ppy.nfclib.util.Util
-import com.ppy.nfcsample.adapter.BaseAdapter
-import com.ppy.nfcsample.adapter.BaseViewHolder
 import com.ppy.nfcsample.card.DefaultCardInfo
-import com.ppy.nfcsample.card.DefaultCardRecord
 import com.ppy.nfcsample.card.reader.CardClient
 import com.ppy.nfcsample.card.reader.SZTReader
 import com.ppy.nfcsample.card.reader.YCTReader
+import com.ppy.nfcsample.ui.ReadCard
 import java.io.IOException
 import java.lang.reflect.Field
 import java.util.*
 
 class MainActivity : NfcActivity() {
 
-    private lateinit var mLlReadCard: LinearLayout
-    private lateinit var mLlShowCard: LinearLayout
-
-    private lateinit var mTvCardNumber: TextView
-    private lateinit var mTvCardBalance: TextView
-
-    private lateinit var mRvCardRecord: RecyclerView
-    private lateinit var mAdapter: BaseAdapter<DefaultCardRecord>
-    private lateinit var mCardRecords: MutableList<DefaultCardRecord>
-
     private lateinit var mCardClient: CardClient
     private var mDialog: Dialog? = null
+
+    private var isPre = mutableStateOf(true)
+    private var mCardInfo: MutableState<DefaultCardInfo?> = mutableStateOf(null)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        initViews()
-        initCardClient()
-    }
-
-    private fun initViews() {
-        mLlReadCard = findViewById(R.id.ll_read_card)
-        mLlShowCard = findViewById(R.id.ll_show_card)
-
-        mTvCardNumber = findViewById(R.id.tv_card_number)
-        mTvCardBalance = findViewById(R.id.tv_card_balance)
-
-        mRvCardRecord = findViewById(R.id.rv_card_record)
-        mRvCardRecord.layoutManager = LinearLayoutManager(this)
-        mRvCardRecord.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-        mCardRecords = ArrayList()
-        mAdapter = object : BaseAdapter<DefaultCardRecord>(R.layout.item_card_record, mCardRecords, this) {
-            override fun bindData(holder: BaseViewHolder, t: DefaultCardRecord, position: Int) {
-                holder.setText(R.id.tv_record_type, t.typeName.toString())
-                holder.setText(R.id.tv_record_date, DateUtil.str2str(t.date!!, DateUtil.MMddHHmmss, DateUtil.MM_dd_HH_mm))
-                val price = Util.toAmountString(t.price)
-                if ("09" == t.typeCode) {
-                    holder.setText(R.id.tv_record_price, "-$price 元")
-                } else {
-                    holder.setText(R.id.tv_record_price, "+$price 元")
-                }
-            }
+        setContent {
+            ReadCard(isPre.value, mCardInfo.value)
         }
-        mRvCardRecord.adapter = mAdapter
+        initCardClient()
     }
 
     private fun initCardClient() {
@@ -133,8 +99,7 @@ class MainActivity : NfcActivity() {
             runOnUiThread {
                 showDialog("读卡失败", "请重新贴紧卡片") {
                     dismissDialog()
-                    mLlShowCard.visibility = View.GONE
-                    mLlReadCard.visibility = View.VISIBLE
+                    isPre.value = true
                 }
             }
             return
@@ -148,29 +113,14 @@ class MainActivity : NfcActivity() {
     }
 
     private fun doOnReadCardSuccess(cardInfo: DefaultCardInfo) {
-        mLlReadCard.visibility = View.GONE
-        mLlShowCard.visibility = View.VISIBLE
-        if (cardInfo.type == 0) {
-            mTvCardNumber.text = getString(R.string.card_number_yc, cardInfo.cardNumber!!)
-            mTvCardBalance.text = getString(R.string.card_balance, Util.toAmountString(cardInfo.balance))
-            mCardRecords.clear()
-            mCardRecords.addAll(cardInfo.records)
-            mAdapter.notifyDataSetChanged()
-        }
-        if (cardInfo.type == 1) {
-            mTvCardNumber.text = getString(R.string.card_number_sz, cardInfo.cardNumber!!)
-            mTvCardBalance.text = getString(R.string.card_balance, Util.toAmountString(cardInfo.balance))
-            mCardRecords.clear()
-            mCardRecords.addAll(cardInfo.records)
-            mAdapter.notifyDataSetChanged()
-        }
+        isPre.value = false
+        mCardInfo.value = cardInfo
     }
 
     private fun doOnReadCardError() {
         showDialog("读卡失败", "暂不支持此类卡片") {
             dismissDialog()
-            mLlShowCard.visibility = View.GONE
-            mLlReadCard.visibility = View.VISIBLE
+            isPre.value = true
         }
     }
 
@@ -238,10 +188,5 @@ class MainActivity : NfcActivity() {
             }
 
         }
-    }
-
-    companion object {
-
-        private const val TAG = "MainActivity"
     }
 }
