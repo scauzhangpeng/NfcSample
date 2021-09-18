@@ -38,10 +38,10 @@ class DefaultCardRecord {
         serialNumber = record.substring(0, 4)
         price = Integer.parseInt(record.substring(10, 18), 16).toLong()
         typeCode = record.substring(18, 20)
-        if ("09" == typeCode) {
-            typeName = "消费"
+        typeName = if ("09" == typeCode) {
+            "消费"
         } else {
-            typeName = "充值"
+            "充值"
         }
         date = record.substring(36, 46)
     }

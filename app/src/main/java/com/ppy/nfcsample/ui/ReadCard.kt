@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -15,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ppy.nfclib.util.Util
@@ -78,16 +75,6 @@ fun ItemCardRecord(record: DefaultCardRecord) {
     }
 }
 
-//@Preview
-//@Composable
-//fun PreviewItemCardRecord() {
-//    val defaultCardRecord = DefaultCardRecord()
-//    defaultCardRecord.price = 900L
-//    defaultCardRecord.typeName = "消费"
-//    defaultCardRecord.typeCode = "09"
-//    ItemCardRecord(record = defaultCardRecord)
-//}
-
 @Composable
 fun PreReadCard() {
     Column(horizontalAlignment = Alignment.CenterHorizontally,
@@ -110,16 +97,6 @@ fun ReadCard(isPre: Boolean, defaultCardInfo: DefaultCardInfo? = null) {
     } else {
         defaultCardInfo?.let {
             ShowCardInfo(it)
-        }
-    }
-}
-
-@Preview
-@Composable
-fun PreviewReadCard() {
-    MaterialTheme {
-        Surface {
-            ReadCard(false)
         }
     }
 }

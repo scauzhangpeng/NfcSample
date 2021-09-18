@@ -13,15 +13,15 @@ class YangChengTong : DefaultCardInfo() {
      *
      */
     fun parseCardInfo(resp: ByteArray): Boolean {
-        try {
+        return try {
             val src = Util.byteArrayToHexString(resp)
             cardNumber = src.substring(22, 32)
             effectiveDate = src.substring(46, 54)
             expiredDate = src.substring(54, 62)
-            return true
+            true
         } catch (ex: Exception) {
             ex.printStackTrace()
-            return false
+            false
         }
 
     }
@@ -32,12 +32,12 @@ class YangChengTong : DefaultCardInfo() {
      * @param src 原始16进制数据
      */
     fun parseCardBalance(src: ByteArray): Boolean {
-        try {
+        return try {
             balance = Util.hexToInt(src, 0, src.size - 2).toLong()
-            return true
+            true
         } catch (ex: Exception) {
             ex.printStackTrace()
-            return false
+            false
         }
 
     }

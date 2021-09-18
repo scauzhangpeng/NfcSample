@@ -17,8 +17,8 @@ interface CardOperatorListener {
     /**
      * NFC异常，例如手机不支持NFC，手机NFC未开启.
      *
-     * @param code    异常状态码 [ExceptionConstant]
-     * @param message 异常信息 [ExceptionConstant]
+     * @param code    异常状态码
+     * @param message 异常信息
      */
     fun onException(code: Int, message: String)
 }

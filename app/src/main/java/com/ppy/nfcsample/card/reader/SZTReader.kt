@@ -21,15 +21,15 @@ class SZTReader : BaseReader(), IReader {
         val cardInfo = ShenZhenTong()
         cardInfo.type = type
 
-        val dir_1001 = Iso7816(Commands.select_1001())
-        val dir_srv_info = Iso7816(Commands.readBinary(21))
+        val dir1001 = Iso7816(Commands.select1001())
+        val dirSrvInfo = Iso7816(Commands.readBinary(21))
         val balance = Iso7816(Commands.getBalance(true))
-        val cmds: MutableList<Iso7816> = ArrayList()
-        cmds.add(dir_1001)
-        cmds.add(dir_srv_info)
-        cmds.add(balance)
+        val cmdList: MutableList<Iso7816> = ArrayList()
+        cmdList.add(dir1001)
+        cmdList.add(dirSrvInfo)
+        cmdList.add(balance)
 
-        val cmdResp = executeCommands(nfcCardReaderManager, cmds) ?: return null
+        val cmdResp = executeCommands(nfcCardReaderManager, cmdList) ?: return null
         if (cmdResp.size < 3) {
             return null
         }
@@ -43,17 +43,17 @@ class SZTReader : BaseReader(), IReader {
             return null
         }
         //read record
-        cmds.clear()
+        cmdList.clear()
         for (i in 1..10) {
-            val dir_srv_record = Iso7816(Commands.readRecord(24, i), true)
-            cmds.add(dir_srv_record)
+            val dirSrvRecord = Iso7816(Commands.readRecord(24, i), true)
+            cmdList.add(dirSrvRecord)
         }
-        for (i in cmds.indices) {
-            val iso7816 = cmds[i]
-            print("指令:" + Commands.ByteArrayToHexString(iso7816.cmd))
+        for (i in cmdList.indices) {
+            val iso7816 = cmdList[i]
+            print("指令:" + Commands.byteArrayToHexString(iso7816.cmd))
             val resp = nfcCardReaderManager.tranceive(iso7816.cmd)
             iso7816.resp = resp
-            println("  响应:" + Commands.ByteArrayToHexString(resp))
+            println("  响应:" + Commands.byteArrayToHexString(resp))
             if (!isSuccess(resp) && !iso7816.isContinue) {
                 return null
             }

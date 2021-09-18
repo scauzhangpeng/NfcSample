@@ -1,11 +1,9 @@
 package com.ppy.nfcsample
 
 import android.app.Dialog
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.TextView
 import androidx.activity.compose.setContent
@@ -20,7 +18,6 @@ import com.ppy.nfcsample.card.reader.SZTReader
 import com.ppy.nfcsample.card.reader.YCTReader
 import com.ppy.nfcsample.ui.ReadCard
 import java.io.IOException
-import java.lang.reflect.Field
 import java.util.*
 
 class MainActivity : NfcActivity() {
@@ -49,7 +46,6 @@ class MainActivity : NfcActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        fixInputMethodManagerLeak(this)
         dismissDialog()
     }
 
@@ -154,39 +150,6 @@ class MainActivity : NfcActivity() {
                 it.dismiss()
                 mDialog = null
             }
-        }
-    }
-
-
-    private fun fixInputMethodManagerLeak(destContext: Context?) {
-        if (destContext == null) {
-            return
-        }
-
-        val imm = destContext.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                ?: return
-
-        val arr = arrayOf("mCurRootView", "mServedView", "mNextServedView", "mLastSrvView")
-        var f: Field?
-        var obj_get: Any?
-        for (i in arr.indices) {
-            val param = arr[i]
-            try {
-                f = imm.javaClass.getDeclaredField(param)
-                if (!f!!.isAccessible) {
-                    f.isAccessible = true
-                }
-                obj_get = f.get(imm)
-                if (obj_get is View) {
-                    val v_get = obj_get as View?
-                    if (v_get!!.context === destContext || param == "mLastSrvView") { // 被InputMethodManager持有引用的context是想要目标销毁的
-                        f.set(imm, null) // 置空，破坏掉path to gc节点
-                    }
-                }
-            } catch (t: Throwable) {
-                t.printStackTrace()
-            }
-
         }
     }
 }

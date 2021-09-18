@@ -8,15 +8,15 @@ import java.nio.ByteBuffer
 
 object Commands {
 
-    val DFN_SRV = byteArrayOf('P'.toByte(), 'A'.toByte(), 'Y'.toByte(), '.'.toByte(), 'A'.toByte(), 'P'.toByte(), 'P'.toByte(), 'Y'.toByte())
+    val DFN_SRV = byteArrayOf('P'.code.toByte(), 'A'.code.toByte(), 'Y'.code.toByte(), '.'.code.toByte(), 'A'.code.toByte(), 'P'.code.toByte(), 'P'.code.toByte(), 'Y'.code.toByte())
 
-    val DFN_SRV_S1 = byteArrayOf('P'.toByte(), 'A'.toByte(), 'Y'.toByte(), '.'.toByte(), 'P'.toByte(), 'A'.toByte(), 'S'.toByte(), 'D'.toByte())
+    val DFN_SRV_S1 = byteArrayOf('P'.code.toByte(), 'A'.code.toByte(), 'Y'.code.toByte(), '.'.code.toByte(), 'P'.code.toByte(), 'A'.code.toByte(), 'S'.code.toByte(), 'D'.code.toByte())
 
-    val DFN_SRV_S2 = byteArrayOf('P'.toByte(), 'A'.toByte(), 'Y'.toByte(), '.'.toByte(), 'T'.toByte(), 'I'.toByte(), 'C'.toByte(), 'L'.toByte())
+    val DFN_SRV_S2 = byteArrayOf('P'.code.toByte(), 'A'.code.toByte(), 'Y'.code.toByte(), '.'.code.toByte(), 'T'.code.toByte(), 'I'.code.toByte(), 'C'.code.toByte(), 'L'.code.toByte())
 
-    val DFN_PSE = byteArrayOf('1'.toByte(), 'P'.toByte(), 'A'.toByte(), 'Y'.toByte(), '.'.toByte(), 'S'.toByte(), 'Y'.toByte(), 'S'.toByte(), '.'.toByte(), 'D'.toByte(), 'D'.toByte(), 'F'.toByte(), '0'.toByte(), '1'.toByte())
+    val DFN_PSE = byteArrayOf('1'.code.toByte(), 'P'.code.toByte(), 'A'.code.toByte(), 'Y'.code.toByte(), '.'.code.toByte(), 'S'.code.toByte(), 'Y'.code.toByte(), 'S'.code.toByte(), '.'.code.toByte(), 'D'.code.toByte(), 'D'.code.toByte(), 'F'.code.toByte(), '0'.code.toByte(), '1'.code.toByte())
 
-    fun select_1001(): ByteArray {
+    fun select1001(): ByteArray {
         val buff = ByteBuffer.allocate(8)
         buff.put(0x00.toByte()) // CLA Class
                 .put(0xA4.toByte()) // INS Instruction
@@ -84,7 +84,7 @@ object Commands {
      * @param bytes Bytes to convert
      * @return String, containing hexadecimal representation.
      */
-    fun ByteArrayToHexString(bytes: ByteArray): String {
+    fun byteArrayToHexString(bytes: ByteArray): String {
         val hexArray = charArrayOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F')
         val hexChars = CharArray(bytes.size * 2)
         var v: Int
@@ -106,7 +106,7 @@ object Commands {
      * @param s String containing hexadecimal characters to convert
      * @return Byte array generated from input
      */
-    fun HexStringToByteArray(s: String): ByteArray {
+    fun hexStringToByteArray(s: String): ByteArray {
         val len = s.length
         val data = ByteArray(len / 2)
         var i = 0

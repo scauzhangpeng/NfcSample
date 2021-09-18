@@ -13,13 +13,13 @@ class ShenZhenTong : DefaultCardInfo() {
      *
      */
     fun parseCardInfo(src: ByteArray): Boolean {
-        try {
+        return try {
             val number = Util.hexToIntLittleEndian(src, 19, 4)
             cardNumber = number.toString()
-            return true
+            true
         } catch (ex: Exception) {
             ex.printStackTrace()
-            return false
+            false
         }
 
     }
@@ -30,12 +30,12 @@ class ShenZhenTong : DefaultCardInfo() {
      * @param src 原始16进制数据
      */
     fun parseCardBalance(src: ByteArray): Boolean {
-        try {
+        return try {
             balance = Util.hexToInt(src, 1, src.size - 2 - 1).toLong()
-            return true
+            true
         } catch (ex: Exception) {
             ex.printStackTrace()
-            return false
+            false
         }
 
     }

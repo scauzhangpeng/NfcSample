@@ -39,14 +39,12 @@ class CardClient private constructor(builder: Builder) {
             this.mNfcCardReaderManager = copy.mNfcCardReaderManager
         }
 
-        fun addReader(reader: IReader): Builder {
+        fun addReader(reader: IReader) = apply {
             readers.add(reader)
-            return this
         }
 
-        fun nfcManager(manager: NfcManagerCompat): Builder {
+        fun nfcManager(manager: NfcManagerCompat) = apply {
             mNfcCardReaderManager = manager
-            return this
         }
 
         fun build(): CardClient {

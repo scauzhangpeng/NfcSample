@@ -41,9 +41,9 @@ open class BaseReader {
     @Throws(IOException::class)
     protected fun executeSingleCommand(mReader: NfcManagerCompat, command: Iso7816): Iso7816? {
         val cmd = command.cmd
-        print("指令:" + Commands.ByteArrayToHexString(cmd))
+        print("指令:" + Commands.byteArrayToHexString(cmd))
         val resp = mReader.tranceive(cmd)
-        println("  响应:" + Commands.ByteArrayToHexString(resp))
+        println("  响应:" + Commands.byteArrayToHexString(resp))
         command.resp = resp
         return if (!isSuccess(resp) && !command.isContinue) {
             null

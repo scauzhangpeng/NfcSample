@@ -51,10 +51,10 @@ class YCTReader : BaseReader(), IReader {
         }
         for (i in cmds.indices) {
             val iso7816 = cmds[i]
-            print("指令:" + Commands.ByteArrayToHexString(iso7816.cmd))
+            print("指令:" + Commands.byteArrayToHexString(iso7816.cmd))
             val resp = nfcCardReaderManager.tranceive(iso7816.cmd)
             iso7816.resp = resp
-            println("  响应:" + Commands.ByteArrayToHexString(resp))
+            println("  响应:" + Commands.byteArrayToHexString(resp))
             if (!isSuccess(resp) && !iso7816.isContinue) {
                 return null
             }
