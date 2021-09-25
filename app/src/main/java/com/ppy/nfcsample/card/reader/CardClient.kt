@@ -32,13 +32,6 @@ class CardClient private constructor(builder: Builder) {
         val readers = ArrayList<IReader>()
         lateinit var mNfcCardReaderManager: NfcManagerCompat
 
-        constructor() {}
-
-        constructor(copy: CardClient) {
-            this.readers.addAll(copy.readers)
-            this.mNfcCardReaderManager = copy.mNfcCardReaderManager
-        }
-
         fun addReader(reader: IReader) = apply {
             readers.add(reader)
         }

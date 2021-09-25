@@ -52,7 +52,7 @@ abstract class NfcActivity : AppCompatActivity() {
         mReaderManager = NfcManagerCompat(activity = this,
             cardOperatorListener = mCardOperatorListener,
             printer = LoggerImpl(),
-            enableSound = false)
+            enableSound = true)
     }
 
     abstract fun doOnCardConnected(isConnected: Boolean)

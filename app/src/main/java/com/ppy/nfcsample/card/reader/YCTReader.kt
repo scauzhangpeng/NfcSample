@@ -21,18 +21,18 @@ class YCTReader : BaseReader(), IReader {
         cardInfo.type = type
 
 //        val dir_pse = Iso7816(Commands.selectByName(*Commands.DFN_PSE))
-        val dir_srv = Iso7816(Commands.selectByName(*Commands.DFN_SRV))
-        val dir_srv_info = Iso7816(Commands.readBinary(21))
-        val dir_srv_s2 = Iso7816(Commands.selectByName(*Commands.DFN_SRV_S2))
+        val dirSrv = Iso7816(Commands.selectByName(*Commands.DFN_SRV))
+        val dirSrvInfo = Iso7816(Commands.readBinary(21))
+        val dirSrvS2 = Iso7816(Commands.selectByName(*Commands.DFN_SRV_S2))
 //        val dir_srv_s1 = Iso7816(Commands.selectByName(*Commands.DFN_SRV_S1))
         val balance = Iso7816(Commands.getBalance(true))
-        val cmds: MutableList<Iso7816> = mutableListOf()
-        cmds.add(dir_srv)
-        cmds.add(dir_srv_info)
-        cmds.add(dir_srv_s2)
-        cmds.add(balance)
+        val cmdList: MutableList<Iso7816> = mutableListOf()
+        cmdList.add(dirSrv)
+        cmdList.add(dirSrvInfo)
+        cmdList.add(dirSrvS2)
+        cmdList.add(balance)
         //read info
-        val cmdResp = executeCommands(nfcCardReaderManager, cmds) ?: return null
+        val cmdResp = executeCommands(nfcCardReaderManager, cmdList) ?: return null
         //parse info
         val parseInfo = cardInfo.parseCardInfo(cmdResp[1].resp)
         if (!parseInfo) {
@@ -44,13 +44,13 @@ class YCTReader : BaseReader(), IReader {
             return null
         }
         //read record
-        cmds.clear()
+        cmdList.clear()
         for (i in 1..12) {
-            val dir_srv_record = Iso7816(Commands.readRecord(24, i), true)
-            cmds.add(dir_srv_record)
+            val dirSrvRecord = Iso7816(Commands.readRecord(24, i), true)
+            cmdList.add(dirSrvRecord)
         }
-        for (i in cmds.indices) {
-            val iso7816 = cmds[i]
+        for (i in cmdList.indices) {
+            val iso7816 = cmdList[i]
             print("指令:" + Commands.byteArrayToHexString(iso7816.cmd))
             val resp = nfcCardReaderManager.tranceive(iso7816.cmd)
             iso7816.resp = resp

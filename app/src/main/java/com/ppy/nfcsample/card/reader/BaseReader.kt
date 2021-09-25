@@ -14,7 +14,7 @@ open class BaseReader {
 
 
     // "OK" status word sent in response to SELECT AID command (0x9000)
-    private val SELECT_OK_SW = byteArrayOf(0x90.toByte(), 0x00.toByte())
+    private val selectOkSW = byteArrayOf(0x90.toByte(), 0x00.toByte())
 
     protected fun isSuccess(tranceive: ByteArray?): Boolean {
         if (tranceive == null) {
@@ -25,7 +25,7 @@ open class BaseReader {
             return false
         }
         val statusWord = byteArrayOf(tranceive[length - 2], tranceive[length - 1])
-        return Arrays.equals(statusWord, SELECT_OK_SW)
+        return statusWord.contentEquals(selectOkSW)
     }
 
     @Throws(IOException::class)
