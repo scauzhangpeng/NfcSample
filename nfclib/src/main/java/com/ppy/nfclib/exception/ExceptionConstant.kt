@@ -25,7 +25,7 @@ object ExceptionConstant {
     const val CONNECT_TAG_FAIL = 2
 
     init {
-        mNFCException.put(NFC_NOT_EXIT, "do not support nfc")
-        mNFCException.put(NFC_NOT_ENABLE, "do not open nfc")
+        mNFCException.put(NFC_NOT_EXIT, "this device does not have NFC support")
+        mNFCException.put(NFC_NOT_ENABLE, "this device does not have NFC enable")
     }
 }

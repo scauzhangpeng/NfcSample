@@ -29,11 +29,11 @@ open class NfcStatusChangeBroadcastReceiver : BroadcastReceiver() {
         }
     }
 
-    protected fun onNfcTurningOn() {
+    protected open fun onNfcTurningOn() {
 
     }
 
-    protected fun onNfcTurningOff() {
+    protected open fun onNfcTurningOff() {
 
     }
 

@@ -21,4 +21,28 @@ interface CardOperatorListener {
      * @param message 异常信息
      */
     fun onException(code: Int, message: String)
+
+    /**
+     * NFC是否开启.
+     * @param stateOn `true` 已开启 <br> `false` 未开启
+     */
+    fun onNfcEnable(stateOn: Boolean) {
+
+    }
+
+    /**
+     * NFC模式为支付模式.
+     * 部分手机: 三星手机
+     */
+    fun onCardPay() {
+
+    }
+
+    /**
+     * NFC是否正在打开或者关闭.
+     * @param turningOn `true` 正在打开 <br> `false` 正在关闭
+     */
+    fun onNfcTurning(turningOn: Boolean) {
+
+    }
 }

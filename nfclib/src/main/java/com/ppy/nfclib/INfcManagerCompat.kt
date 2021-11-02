@@ -13,22 +13,6 @@ interface INfcManagerCompat {
      */
     fun isCardConnect(): Boolean
 
-    fun onCreate(intent: Intent)
-
-    fun onStart() {
-
-    }
-
-    fun onResume()
-
-    fun onPause()
-
-    fun onStop() {
-
-    }
-
-    fun onDestroy()
-
     fun onNewIntent(intent: Intent)
 
     @Throws(IOException::class)

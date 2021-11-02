@@ -10,6 +10,7 @@ import androidx.activity.compose.setContent
 import androidx.appcompat.app.AlertDialog
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.core.content.ContextCompat
 import com.ppy.nfclib.exception.ExceptionConstant
 import com.ppy.nfclib.util.Util
 import com.ppy.nfcsample.card.DefaultCardInfo
@@ -87,25 +88,25 @@ class MainActivity : NfcActivity() {
 
     private fun execute() {
         dismissDialog()
-        val cardInfo: DefaultCardInfo?
-        try {
-            cardInfo = mCardClient.execute()
-        } catch (e: IOException) {
-            e.printStackTrace()
-            runOnUiThread {
-                showDialog("读卡失败", "请重新贴紧卡片") {
-                    dismissDialog()
-                    isPre.value = true
+        Thread {//读卡耗时放在子线程
+            val cardInfo: DefaultCardInfo?
+            try {
+                cardInfo = mCardClient.execute()
+                ContextCompat.getMainExecutor(this@MainActivity).execute {
+                    cardInfo?.let {
+                        doOnReadCardSuccess(it)
+                    } ?: doOnReadCardError()
+                }
+            } catch (e: IOException) {
+                e.printStackTrace()
+                ContextCompat.getMainExecutor(this@MainActivity).execute {
+                    showDialog("读卡失败", "请重新贴紧卡片") {
+                        dismissDialog()
+                        isPre.value = true
+                    }
                 }
             }
-            return
-        }
-
-        runOnUiThread {
-            cardInfo?.let {
-                doOnReadCardSuccess(it)
-            } ?: doOnReadCardError()
-        }
+        }.start()
     }
 
     private fun doOnReadCardSuccess(cardInfo: DefaultCardInfo) {
