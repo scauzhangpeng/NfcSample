@@ -162,6 +162,11 @@ object Util {
      * @return `true` 跳转成功 <br></br> `false` 跳转失败
      */
     fun intentToNfcSetting(context: Context): Boolean {
+        if ("Smartisan".equals(Build.MANUFACTURER, true)) {
+            if (intentToNfcShare(context)) {
+                return true
+            }
+        }
         if (isNfcExits(context)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 return toIntent(context, Settings.ACTION_NFC_SETTINGS)
