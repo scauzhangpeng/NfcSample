@@ -20,6 +20,7 @@ import com.ppy.nfcsample.card.reader.YCTReader
 import com.ppy.nfcsample.ui.ReadCard
 import java.io.IOException
 import java.util.*
+import kotlin.concurrent.thread
 
 class MainActivity : NfcActivity() {
 
@@ -88,7 +89,7 @@ class MainActivity : NfcActivity() {
 
     private fun execute() {
         dismissDialog()
-        Thread {//读卡耗时放在子线程
+        thread {//读卡耗时放在子线程
             val cardInfo: DefaultCardInfo?
             try {
                 cardInfo = mCardClient.execute()
@@ -106,7 +107,7 @@ class MainActivity : NfcActivity() {
                     }
                 }
             }
-        }.start()
+        }
     }
 
     private fun doOnReadCardSuccess(cardInfo: DefaultCardInfo) {

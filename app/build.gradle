@@ -7,7 +7,7 @@ android {
         applicationId "com.ppy.nfcsample"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionName "1.0"
+        versionName "2.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -33,7 +33,8 @@ dependencies {
     })
     implementation 'androidx.appcompat:appcompat:1.3.1'
     testImplementation 'junit:junit:4.13.2'
-    implementation project(':nfclib')
+//    implementation project(':nfclib')
+    implementation 'io.github.scauzhangpeng:nfccompat:2.0.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     implementation "androidx.compose.ui:ui:$compose_version"
