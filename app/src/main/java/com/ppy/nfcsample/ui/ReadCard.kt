@@ -82,9 +82,9 @@ fun PreReadCard() {
             .fillMaxWidth()
             .fillMaxHeight()) {
         Spacer(Modifier.height(30.dp))
-        Text(text = "将卡片贴于手机背面", fontSize = 20.sp, color = Color.Black)
+        Text(text = stringResource(R.string.tab_card_on_back), fontSize = 20.sp, color = Color.Black)
         Spacer(modifier = Modifier.height(15.dp))
-        Text(text = "移动卡片直到读卡成功", fontSize = 16.sp, color = Color.Gray)
+        Text(text = stringResource(R.string.move_card_util_success), fontSize = 16.sp, color = Color.Gray)
         Spacer(modifier = Modifier.padding(top = 30.dp))
         Image(painter = painterResource(id = R.drawable.nfc_read_card), contentDescription = "")
     }

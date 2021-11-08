@@ -15,6 +15,7 @@ import com.ppy.nfclib.util.Logger
 import com.ppy.nfclib.util.Printer
 import com.ppy.nfclib.util.Util
 import java.io.IOException
+import java.util.concurrent.atomic.AtomicBoolean
 
 class NfcManagerCompat(
     activity: ComponentActivity, private var delay: Int = 0, enableSound: Boolean = true,
@@ -71,6 +72,7 @@ class NfcManagerCompat(
             override fun onNfcOn() {
                 super.onNfcOn()
                 cardOperatorListener?.onNfcEnable(true)
+                enableCardReaderSafe()
             }
 
             override fun onNfcTurningOff() {
@@ -85,6 +87,7 @@ class NfcManagerCompat(
         }
     }
 
+    private var isActivityResume = AtomicBoolean()
 
     init {
         Logger.get().setUserPrinter(printer)
@@ -113,23 +116,37 @@ class NfcManagerCompat(
 
             @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
             fun onResume() {
-                if (mCardReader.checkNfc()) {
-                    mCardReader.enableCardReader()
-                }
+                Logger.get().println("onResumeLife")
+                isActivityResume.set(true)
+                enableCardReaderSafe()
             }
 
 
             @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
             fun onPause() {
+                isActivityResume.set(false)
                 mCardReader.disableCardReader()
             }
 
             @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
             fun onDestroy() {
+                isActivityResume.set(false)
                 activity.unregisterReceiver(mNfcStateBroadcastReceiver)
                 mCardReader.stopCheckThread()
             }
         })
+    }
+
+    /**
+     * 设置NFC前台监听.
+     * 确保NFC已经打开并且读卡界面处于resume状态才能设置
+     * 场景1：NFC的state为[NfcAdapter.STATE_TURNING_ON]回到读卡界面回调[ComponentActivity.onResume]
+     * 场景2：NFC的state为[NfcAdapter.STATE_ON]再回到读卡界面回调[ComponentActivity.onResume]
+     */
+    private fun enableCardReaderSafe() {
+        if (mCardReader.checkNfc() && isActivityResume.get()) {
+            mCardReader.enableCardReader()
+        }
     }
 
 

@@ -28,6 +28,7 @@ class JellyBeanCardReader(
 
 
     override fun enableCardReader() {
+        super.enableCardReader()
         val techListsArray = arrayOf(arrayOf(NfcF::class.java.name), arrayOf(IsoDep::class.java.name), arrayOf(NfcA::class.java.name))
         mDefaultNfcAdapter?.enableForegroundDispatch(activity, mPendingIntent, null, techListsArray)
     }

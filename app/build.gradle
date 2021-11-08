@@ -24,17 +24,30 @@ android {
         kotlinCompilerExtensionVersion compose_version
         kotlinCompilerVersion kotlin_version
     }
+
+    flavorDimensions "api"
+
+    productFlavors {
+        main {
+
+        }
+        min18 {
+            applicationId = "com.alphabet.nfc.min18"
+            minSdkVersion 18
+        }
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
     androidTestImplementation('androidx.test.espresso:espresso-core:3.4.0', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     implementation 'androidx.appcompat:appcompat:1.3.1'
     testImplementation 'junit:junit:4.13.2'
-//    implementation project(':nfclib')
-    implementation 'io.github.scauzhangpeng:nfccompat:2.0.0'
+    implementation project(':nfclib')
+//    implementation 'io.github.scauzhangpeng:nfccompat:2.0.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     implementation "androidx.compose.ui:ui:$compose_version"
@@ -43,7 +56,10 @@ dependencies {
     implementation "androidx.compose.ui:ui-tooling:$compose_version"
     implementation 'androidx.activity:activity-compose:1.3.1'
 
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.4'
+
 }
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
 }

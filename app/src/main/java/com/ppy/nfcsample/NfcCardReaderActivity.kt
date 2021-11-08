@@ -12,6 +12,7 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ppy.nfcsample.ui.brand
@@ -44,7 +45,7 @@ class NfcCardReaderActivity : ComponentActivity() {
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            Text(text = "读取城市一卡通")
+            Text(text = stringResource(R.string.city_card_reader))
         }
     }
 }

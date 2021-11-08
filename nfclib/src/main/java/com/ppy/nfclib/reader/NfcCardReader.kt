@@ -31,7 +31,9 @@ interface NfcCardReader {
     /**
      * 启动Nfc读卡器模式.
      */
-    fun enableCardReader()
+    fun enableCardReader() {
+        Logger.get().println("enableCardReader")
+    }
 
     /**
      * 关闭Nfc读卡器模式.

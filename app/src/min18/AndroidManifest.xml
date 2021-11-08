@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-sdk tools:overrideLibrary="androidx.compose.ui.tooling,
+            androidx.compose.material,
+            androidx.activity.compose,
+            androidx.compose.material.ripple,
+            androidx.compose.foundation,
+            androidx.compose.animation,
+            androidx.compose.animation.core,
+            androidx.compose.material.icons,
+            androidx.compose.foundation.layout,
+            androidx.compose.ui.tooling.data,
+            androidx.compose.ui.tooling.preview,
+            androidx.compose.ui.text,
+            androidx.compose.runtime.saveable,
+            androidx.compose.ui.graphics,
+            androidx.compose.ui.unit,
+            androidx.compose.ui.geometry,
+            androidx.compose.ui.util" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name="com.ppy.nfcsample.NfcCardReaderMin18Activity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="com.ppy.nfcsample.MainMin18Activity"
+            android:exported="true"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.nfc.action.TECH_DISCOVERED" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.nfc.action.TECH_DISCOVERED"
+                android:resource="@xml/nfc_tech_filter" />
+
+            <intent-filter>
+                <action android:name="android.nfc.action.TAG_DISCOVERED" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

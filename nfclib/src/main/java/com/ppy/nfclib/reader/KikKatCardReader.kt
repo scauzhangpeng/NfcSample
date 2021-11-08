@@ -26,6 +26,7 @@ class KikKatCardReader(
     }
 
     override fun enableCardReader() {
+        super.enableCardReader()
         val delay = extra.getInt(NfcAdapter.EXTRA_READER_PRESENCE_CHECK_DELAY, -1)
         if (delay > 0) {
             mDefaultNfcAdapter?.enableReaderMode(activity, mReaderCallback, READER_FLAG, extra)

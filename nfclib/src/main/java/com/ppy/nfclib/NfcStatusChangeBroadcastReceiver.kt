@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.nfc.NfcAdapter
 import android.os.Build
+import com.ppy.nfclib.util.Logger
 
 /**
  * NFC开启、关闭系统广播.
@@ -17,7 +18,11 @@ open class NfcStatusChangeBroadcastReceiver : BroadcastReceiver() {
         val action = intent.action
         if (NfcAdapter.ACTION_ADAPTER_STATE_CHANGED == action) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                when (intent.getIntExtra(NfcAdapter.EXTRA_ADAPTER_STATE, NfcAdapter.STATE_OFF)) {
+                val state =
+                    intent.getIntExtra(NfcAdapter.EXTRA_ADAPTER_STATE, NfcAdapter.STATE_OFF)
+
+                Logger.get().println("nfc state broadcast receiver, state is $state")
+                when (state) {
                     NfcAdapter.STATE_OFF -> onNfcOff()
                     NfcAdapter.STATE_ON -> onNfcOn()
                     NfcAdapter.STATE_TURNING_OFF -> onNfcTurningOff()

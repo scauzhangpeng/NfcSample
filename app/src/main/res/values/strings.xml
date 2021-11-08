@@ -3,4 +3,8 @@
     <string name="card_number_yc">羊城通卡号:%s</string>
     <string name="card_balance">余额：%s</string>
     <string name="card_number_sz">深圳通卡号:%s</string>
+
+    <string name="city_card_reader">读取城市一卡通</string>
+    <string name="tab_card_on_back">将卡片贴于手机背面</string>
+    <string name="move_card_util_success">移动卡片直到读卡成功</string>
 </resources>
