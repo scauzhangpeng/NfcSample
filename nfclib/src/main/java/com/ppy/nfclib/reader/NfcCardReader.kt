@@ -56,6 +56,14 @@ interface NfcCardReader {
     fun setReaderPresenceCheckDelay(delay: Int) {
     }
 
+    /**
+     * 延迟初始化NFC监听.
+     * @param delay 延迟时间，单位毫秒.
+     * 前后台频繁切换导致：
+     * NfcService error: setReaderMode: Caller is not in foreground and is not system process.
+     */
+    fun setEnableCardReaderDelay(delay: Long)
+
     @Throws(IOException::class)
     fun transceive(data: ByteArray): ByteArray
 

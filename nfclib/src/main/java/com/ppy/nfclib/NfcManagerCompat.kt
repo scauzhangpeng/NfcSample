@@ -18,7 +18,8 @@ import java.io.IOException
 import java.util.concurrent.atomic.AtomicBoolean
 
 class NfcManagerCompat(
-    activity: ComponentActivity, private var delay: Int = 0, enableSound: Boolean = true,
+    activity: ComponentActivity, enableSound: Boolean = true,
+    private var checkTagDelay: Int = 0, enableInitDelay: Long = 150,
     val printer: Printer, val cardOperatorListener: CardOperatorListener? = null
 ) : INfcManagerCompat {
 
@@ -91,11 +92,12 @@ class NfcManagerCompat(
 
     init {
         Logger.get().setUserPrinter(printer)
-        if (delay < 0) {
-            delay = 0
+        if (checkTagDelay < 0) {
+            checkTagDelay = 0
         }
         mCardReader.enablePlatformSound(enableSound)
-        mCardReader.setReaderPresenceCheckDelay(delay)
+        mCardReader.setReaderPresenceCheckDelay(checkTagDelay)
+        mCardReader.setEnableCardReaderDelay(enableInitDelay)
         //lifecycle for NfcManager
         activity.lifecycle.addObserver(object : LifecycleObserver {
             @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
@@ -116,7 +118,6 @@ class NfcManagerCompat(
 
             @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
             fun onResume() {
-                Logger.get().println("onResumeLife")
                 isActivityResume.set(true)
                 enableCardReaderSafe()
             }

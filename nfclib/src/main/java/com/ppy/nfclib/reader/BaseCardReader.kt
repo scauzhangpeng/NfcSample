@@ -38,6 +38,12 @@ abstract class BaseCardReader(override val activity: Activity, override val mCar
 
     private var mIsoDep: IsoDep? = null
 
+    protected var mEnableInitDelay: Long = 150
+
+    override fun setEnableCardReaderDelay(delay: Long) {
+        mEnableInitDelay = delay
+    }
+
     @Throws(IOException::class)
     override fun transceive(data: ByteArray): ByteArray {
         return mIsoDep?.transceive(data) ?: throw TagLostException("IsoDep is null")

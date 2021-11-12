@@ -52,6 +52,7 @@ abstract class NfcActivity : AppCompatActivity() {
     private fun initNfcCardReader() {
         mReaderManager = NfcManagerCompat(activity = this,
             cardOperatorListener = mCardOperatorListener,
+            enableInitDelay = 150,
             printer = LoggerImpl(),
             enableSound = true)
     }

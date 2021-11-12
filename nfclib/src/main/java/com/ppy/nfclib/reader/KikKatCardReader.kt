@@ -6,6 +6,7 @@ import android.nfc.NfcAdapter
 import android.os.Build
 import android.os.Bundle
 import com.ppy.nfclib.CardReaderInnerCallback
+import com.ppy.nfclib.util.Logger
 
 /**
  * API 大于等于 19 NFC读卡器模式.
@@ -28,6 +29,12 @@ class KikKatCardReader(
     override fun enableCardReader() {
         super.enableCardReader()
         val delay = extra.getInt(NfcAdapter.EXTRA_READER_PRESENCE_CHECK_DELAY, -1)
+        try {
+            Logger.get().println("delay $mEnableInitDelay ms to fix \"NfcService error: setReaderMode: Caller is not in foreground and is not system process.\"")
+            Thread.sleep(mEnableInitDelay)
+        } catch (e: Exception) {
+            Logger.get().println(e.message ?: "delay $mEnableInitDelay ms failure", e)
+        }
         if (delay > 0) {
             mDefaultNfcAdapter?.enableReaderMode(activity, mReaderCallback, READER_FLAG, extra)
         } else {
