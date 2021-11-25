@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.ppy.nfclib.CardOperatorListener
+import com.ppy.nfclib.Executor
 import com.ppy.nfclib.NfcManagerCompat
 
 /**
@@ -22,9 +23,9 @@ abstract class NfcActivity : AppCompatActivity() {
             doOnCardConnected(isConnected)
         }
 
-        override fun onException(code: Int, message: String) {
+        override fun onException(code: Int, message: String, executor: Executor?) {
             Log.d(TAG, "onException: code = $code,message = $message")
-            doOnException(code, message)
+            doOnException(code, message, executor)
         }
 
         override fun onCardPay() {
@@ -59,7 +60,7 @@ abstract class NfcActivity : AppCompatActivity() {
 
     abstract fun doOnCardConnected(isConnected: Boolean)
 
-    abstract fun doOnException(code: Int, message: String)
+    abstract fun doOnException(code: Int, message: String, executor: Executor?)
 
     abstract fun doOnNfcOn()
 

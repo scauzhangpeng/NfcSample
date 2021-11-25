@@ -12,7 +12,7 @@ import com.ppy.nfclib.CardReaderInnerCallback
  * API 小于 19 NFC读卡器模式.
  * Created by ZP on 2017/9/20.
  */
-class JellyBeanCardReader(
+open class JellyBeanCardReader(
     override val activity: Activity,
     override val mCardReaderInnerCallback: CardReaderInnerCallback?
 ) : BaseCardReader(activity, mCardReaderInnerCallback) {

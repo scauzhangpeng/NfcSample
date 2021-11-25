@@ -11,6 +11,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
+import com.ppy.nfclib.Executor
 import com.ppy.nfclib.exception.ExceptionConstant
 import com.ppy.nfclib.util.Util
 import com.ppy.nfcsample.card.DefaultCardInfo
@@ -71,21 +72,40 @@ open class CommonActivity: NfcActivity() {
         }
     }
 
-    override fun doOnException(code: Int, message: String) {
-        if (code == ExceptionConstant.NFC_NOT_ENABLE) {
-            showDialog("NFC设备", "NFC未打开，前往打开？") {
-                dismissDialog()
-                Util.intentToNfcSetting(this)
+    override fun doOnException(code: Int, message: String, executor: Executor?) {
+        when(code) {
+            //设备不支持NFC
+            ExceptionConstant.NFC_NOT_EXIT -> {
+                showDialog("NFC设备", "设备不支持NFC") {
+                    dismissDialog()
+                }
             }
-        }
-
-        if (code == ExceptionConstant.NFC_NOT_EXIT) {
-            showDialog("NFC设备", "设备不支持NFC") { dismissDialog() }
-        }
-
-        if (code == ExceptionConstant.CONNECT_TAG_FAIL) {
-            showDialog("读卡失败", "请重新贴紧卡片") {
-                dismissDialog()
+            //设备NFC未打开
+            ExceptionConstant.NFC_NOT_ENABLE -> {
+                showDialog("NFC设备", "NFC未打开，前往打开？") {
+                    dismissDialog()
+                    executor?.actionNext()
+                }
+            }
+            //应用NFC权限被禁止
+            ExceptionConstant.NFC_PERMISSION_NOT_GRANTED -> {
+                showDialog("NFC权限", "请前往应用权限设置界面授权NFC权限") {
+                    dismissDialog()
+                    executor?.actionNext()
+                }
+            }
+            //应用NFC权限询问
+            ExceptionConstant.NFC_PERMISSION_ASK -> {
+                showDialog("NFC权限", "系统询问是否允许使用NFC，请允许") {
+                    dismissDialog()
+                    executor?.actionNext()
+                }
+            }
+            //卡片连接失败，原因可能是权限问题、可能是某次操作卡片问题
+            ExceptionConstant.CONNECT_TAG_FAIL -> {
+                showDialog("读卡失败", "请重新贴紧卡片") {
+                    dismissDialog()
+                }
             }
         }
     }

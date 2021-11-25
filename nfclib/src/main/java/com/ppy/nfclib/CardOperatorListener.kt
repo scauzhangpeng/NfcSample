@@ -1,5 +1,6 @@
 package com.ppy.nfclib
 
+import com.ppy.nfclib.exception.ExceptionConstant
 /**
  * NFC与CPU卡片交互监听.
  * Created by ZP on 2017/9/20.
@@ -20,7 +21,7 @@ interface CardOperatorListener {
      * @param code    异常状态码
      * @param message 异常信息
      */
-    fun onException(code: Int, message: String)
+    fun onException(code: Int, message: String = ExceptionConstant.mNFCException.get(code), executor: Executor? = null)
 
     /**
      * NFC是否开启.

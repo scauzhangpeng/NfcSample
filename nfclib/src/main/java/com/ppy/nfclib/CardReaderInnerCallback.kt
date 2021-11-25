@@ -1,6 +1,6 @@
 package com.ppy.nfclib
 
-import java.lang.Exception
+import com.ppy.nfclib.util.MiUtil
 
 /**
  * 监听回调接口.
@@ -18,6 +18,11 @@ interface CardReaderInnerCallback {
      * 手机支持NFC,但未开启.
      */
     fun onNfcNotEnable()
+
+    /**
+     * NFC权限回调.
+     */
+    fun onNfcPermission(@MiUtil.PermissionResult permission: Int)
 
     /**
      * CPU卡是否被NFC检测到.

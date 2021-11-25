@@ -24,8 +24,17 @@ object ExceptionConstant {
      */
     const val CONNECT_TAG_FAIL = 2
 
+    const val NFC_PERMISSION_NOT_GRANTED = 3
+
+    const val NFC_PERMISSION_UNKNOWN = 4
+
+    const val NFC_PERMISSION_ASK = 5
+
     init {
         mNFCException.put(NFC_NOT_EXIT, "this device does not have NFC support")
         mNFCException.put(NFC_NOT_ENABLE, "this device does not have NFC enable")
+        mNFCException.put(NFC_PERMISSION_NOT_GRANTED, "this app does not have NFC permission")
+        mNFCException.put(NFC_PERMISSION_UNKNOWN, "this app does not have NFC permission")
+        mNFCException.put(NFC_PERMISSION_ASK, "this app does not have NFC permission")
     }
 }

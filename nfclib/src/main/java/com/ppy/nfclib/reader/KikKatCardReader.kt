@@ -28,13 +28,14 @@ class KikKatCardReader(
 
     override fun enableCardReader() {
         super.enableCardReader()
-        val delay = extra.getInt(NfcAdapter.EXTRA_READER_PRESENCE_CHECK_DELAY, -1)
+        val initDelay = extra.getLong(ENABLE_INIT_DELAY, DEFAULT_INIT_DELAY)
         try {
-            Logger.get().println("delay $mEnableInitDelay ms to fix \"NfcService error: setReaderMode: Caller is not in foreground and is not system process.\"")
-            Thread.sleep(mEnableInitDelay)
+            Logger.get().println("delay $initDelay ms to fix \"NfcService error: setReaderMode: Caller is not in foreground and is not system process.\"")
+            Thread.sleep(initDelay)
         } catch (e: Exception) {
-            Logger.get().println(e.message ?: "delay $mEnableInitDelay ms failure", e)
+            Logger.get().println(e.message ?: "delay $initDelay ms failure", e)
         }
+        val delay = extra.getInt(NfcAdapter.EXTRA_READER_PRESENCE_CHECK_DELAY, -1)
         if (delay > 0) {
             mDefaultNfcAdapter?.enableReaderMode(activity, mReaderCallback, READER_FLAG, extra)
         } else {
@@ -53,11 +54,19 @@ class KikKatCardReader(
         }
     }
 
+    override fun setEnableCardReaderDelay(delay: Long) {
+        extra.putLong(ENABLE_INIT_DELAY, if (delay < 0) DEFAULT_INIT_DELAY else delay)
+    }
+
     override fun setReaderPresenceCheckDelay(delay: Int) {
         extra.putInt(NfcAdapter.EXTRA_READER_PRESENCE_CHECK_DELAY, delay)
     }
 
     companion object {
+
+        private const val DEFAULT_INIT_DELAY = 150L
+
+        private const val ENABLE_INIT_DELAY = "enable_init_delay"
 
         private const val PLATFORM_SOUND = NfcAdapter.FLAG_READER_NO_PLATFORM_SOUNDS
 

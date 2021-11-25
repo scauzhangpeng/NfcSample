@@ -4,12 +4,14 @@ import android.content.Intent
 import android.nfc.NfcAdapter
 import android.nfc.Tag
 import androidx.activity.ComponentActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import com.ppy.nfclib.exception.ConnectTagException
 import com.ppy.nfclib.exception.ExceptionConstant
 import com.ppy.nfclib.reader.BaseCardReader
+import com.ppy.nfclib.reader.MIUICardReader
 import com.ppy.nfclib.reader.NfcCardReader
 import com.ppy.nfclib.util.Logger
 import com.ppy.nfclib.util.Printer
@@ -19,31 +21,55 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 class NfcManagerCompat(
     activity: ComponentActivity, enableSound: Boolean = true,
-    private var checkTagDelay: Int = 0, enableInitDelay: Long = 150,
+    private var checkTagDelay: Int = 0, enableInitDelay: Long = 150L,
     val printer: Printer, val cardOperatorListener: CardOperatorListener? = null
 ) : INfcManagerCompat {
 
+    private var mTag: Tag? = null
+
+    private val mExecutor by lazy {
+        object : Executor {
+            override fun actionNext() {
+                if (mCardReader is MIUICardReader) {
+                    mTag?.let {
+                        (mCardReader as MIUICardReader).dispatchTagCore(it)
+                        mTag = null
+                    }
+                    (mCardReader as MIUICardReader).enableCardReaderCore()
+                }
+            }
+        }
+    }
+
     private val mCallback = object : CardReaderInnerCallback {
         override fun onNfcNotExit() {
-            cardOperatorListener?.onException(
-                ExceptionConstant.NFC_NOT_EXIT,
-                ExceptionConstant.mNFCException.get(ExceptionConstant.NFC_NOT_EXIT)
-            )
+            cardOperatorListener?.onException(ExceptionConstant.NFC_NOT_EXIT)
         }
 
         override fun onNfcNotEnable() {
             cardOperatorListener?.onException(
                 ExceptionConstant.NFC_NOT_ENABLE,
-                ExceptionConstant.mNFCException.get(ExceptionConstant.NFC_NOT_ENABLE)
+                executor = Executor.DefaultNfcSetting(activity)
             )
         }
 
+        override fun onNfcPermission(permission: Int) {
+            if (permission != 0) {
+                cardOperatorListener?.onException(permission,
+                    executor = if (permission == 5) mExecutor
+                    else Executor.DefaultAppSetting(activity))
+            }
+        }
+
         override fun onCardConnected(isConnected: Boolean) {
+            if (!isConnected) {
+                mTag = null
+            }
             cardOperatorListener?.onCardConnected(isConnected)
         }
 
         override fun onException(exception: Exception) {
-            Util.MainThreadExecutor().execute {
+            ContextCompat.getMainExecutor(activity).execute {
                 if (exception is ConnectTagException) {
                     cardOperatorListener?.onException(
                         ExceptionConstant.CONNECT_TAG_FAIL,
@@ -147,6 +173,9 @@ class NfcManagerCompat(
     private fun enableCardReaderSafe() {
         if (mCardReader.checkNfc() && isActivityResume.get()) {
             mCardReader.enableCardReader()
+            mTag?.let {
+                mCardReader.dispatchTag(it)
+            }
         }
     }
 
@@ -159,6 +188,7 @@ class NfcManagerCompat(
         intent?.let {
             val tag = it.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)
             if (tag != null) {
+                mTag = tag
                 mCardReader.dispatchTag(tag)
             } else {
                 Logger.get().println("dispatchIntent: tag is null")

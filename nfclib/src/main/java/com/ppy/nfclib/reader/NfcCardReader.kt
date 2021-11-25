@@ -17,6 +17,7 @@ interface NfcCardReader {
      * @return true 设备具备Nfc并且已打开读卡器模式 <br> false 设备不具备Nfc或者Nfc未打开
      */
     fun checkNfc(): Boolean {
+        Logger.get().println("checkNfc")
         if (!Util.isNfcExits(activity)) {
             mCardReaderInnerCallback?.onNfcNotExit()
             return false
@@ -62,7 +63,9 @@ interface NfcCardReader {
      * 前后台频繁切换导致：
      * NfcService error: setReaderMode: Caller is not in foreground and is not system process.
      */
-    fun setEnableCardReaderDelay(delay: Long)
+    fun setEnableCardReaderDelay(delay: Long) {
+
+    }
 
     @Throws(IOException::class)
     fun transceive(data: ByteArray): ByteArray
@@ -74,7 +77,14 @@ interface NfcCardReader {
     companion object Factory {
         operator fun invoke(activity: Activity, mCardReaderInnerCallback: CardReaderInnerCallback): BaseCardReader {
             return when {
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT -> KikKatCardReader(activity, mCardReaderInnerCallback)
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT -> {
+                    if ("xiaomi".equals(Build.MANUFACTURER, true)) {
+                        MIUICardReader(activity, mCardReaderInnerCallback)
+                    } else {
+                        KikKatCardReader(activity, mCardReaderInnerCallback)
+                    }
+                }
+
                 else -> JellyBeanCardReader(activity, mCardReaderInnerCallback)
             }
         }
